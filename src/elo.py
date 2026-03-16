@@ -5,7 +5,6 @@
 # Imports
 import pandas as pd
 import numpy as np
-import os
 import constants
 import load_save
 
@@ -140,10 +139,6 @@ def calculate_season_elo(season):
 
         elo_history[home_team].append((team_game_counts[home_team], current_ratings[home_team]))
         elo_history[away_team].append((team_game_counts[away_team], current_ratings[away_team]))
-
-    # Save CSVs
-    save_dir = os.path.join(DATA_DIR, 'team_card_data', season, 'elo')
-    os.makedirs(save_dir, exist_ok=True)
 
     # Fix inconsistent team names
     inverted_team_dict = {value: key for key, value in constants.TEAM_NAMES.items()}
