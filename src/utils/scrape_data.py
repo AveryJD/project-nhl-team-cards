@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import random
-import constants
-import load_save
+from utils import constants as constants
+from utils import load_save as load_save
 
 
 DATA_DIR = constants.DATA_DIR
@@ -27,12 +27,12 @@ def random_delay() -> None:
     time.sleep(delay)
 
 
-def get_page(url: str) -> str:
+def get_page(url: str) -> bytes:
     """
     Fetch the HTML content of a given URL.
 
     :param url: The URL to fetch
-    :return: The content of the fetched page, or None if the request fails
+    :return: The content of the fetched page
     """
     # Delay before fetching the page
     random_delay()
@@ -68,7 +68,11 @@ def scrape_data(url: str) -> pd.DataFrame:
 
 def scrape_team_data(season: str, situation: str) -> None:
     """
-    
+    Scrape team statistics for a given season and game situation, then save the results as a CSV.
+
+    :param season: Season string ('YYYY-YYYY')
+    :param situation: Game situation code used by Natural Stat Trick (e.g., 'all', '5v5', '5v4', '4v5')
+    :return: None
     """
 
     url_season = season.replace("-", "")
@@ -88,9 +92,36 @@ def scrape_team_data(season: str, situation: str) -> None:
     return None
 
 
+def scrape_standings_data(season: str) -> None:
+    """
+    Scrape league standings data for a given season and save the results as a CSV.
+
+    :param season: Season string ('YYYY-YYYY')
+    :return: None
+    """
+
+    url_season = season.replace("-", "")
+    url = f'https://www.naturalstattrick.com/standings.php?season={url_season}&type=pts&disp=league'
+
+    df = scrape_data(url)
+
+    # Remove playoff/elimination prefixes from team names
+    df["Team"] = df["Team"].str.replace(r"^[a-z]\s*-\s*", "", regex=True)
+    df["Team"] = df["Team"].str.strip()
+
+    # Save as a CSV
+    file_name = f'{season}_standings.csv'
+    load_save.save_csv(df, season, 'results', file_name)
+
+    return None
+
+
 def scrape_games_data(season: str) -> None:
     """
-    
+    Scrape game results data for a given season and save the results as a CSV.
+
+    :param season: Season string ('YYYY-YYYY')
+    :return: None
     """
 
     url_season = season.replace("-", "")
@@ -103,23 +134,3 @@ def scrape_games_data(season: str) -> None:
     load_save.save_csv(df, season, 'results', file_name)
 
     return None
-
-
-
-def main():
-    """
-    
-    """
-
-    for season in constants.DATA_SEASONS:
-
-        scrape_games_data(season)
-
-        for situation in constants.SITUATIONS:
-            scrape_team_data(season, situation)
-
-    return None
-
-
-if __name__ == "__main__":
-    main()
