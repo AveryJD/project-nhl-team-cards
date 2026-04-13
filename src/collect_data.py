@@ -14,7 +14,10 @@ collect_logos.scrape_logos()
 # Gather team data from NaturalStatTrick
 for season in constants.DATA_SEASONS:
 
+    # Gather standings data
+    scrape_data.scrape_standings_data()
+    # Gather games data
     scrape_data.scrape_games_data(season)
-
+    # Gather team statistics for multiple situations
     for situation in constants.SITUATIONS:
         scrape_data.scrape_team_data(season, situation)
