@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import random
-from utils import constants as constants
-from utils import load_save as load_save
+from utils import constants
+from utils import load_save
 
 
 DATA_DIR = constants.DATA_DIR

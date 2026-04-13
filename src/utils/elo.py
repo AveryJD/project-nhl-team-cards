@@ -5,8 +5,8 @@
 # Imports
 import pandas as pd
 import numpy as np
-from utils import constants as constants
-from utils import load_save as load_save
+from utils import constants
+from utils import load_save
 
 
 DATA_DIR = constants.DATA_DIR
