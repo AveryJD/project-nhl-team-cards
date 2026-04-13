@@ -109,6 +109,9 @@ def scrape_standings_data(season: str) -> None:
     df["Team"] = df["Team"].str.replace(r"^[a-z]\s*-\s*", "", regex=True)
     df["Team"] = df["Team"].str.strip()
 
+    # Keep NHL teams only (special case with Four Nations teams)
+    df = df[df["Games Played"] != "0"]
+
     # Save as a CSV
     file_name = f'{season}_standings.csv'
     load_save.save_csv(df, season, 'results', file_name)
