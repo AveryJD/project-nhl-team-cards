@@ -64,13 +64,13 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     
     
     # Get standings variables
-    wins = team_row['W']
-    losses = team_row['L']
-    otl = team_row['OTL']
+    wins = team_row['Wins']
+    losses = team_row['Losses']
+    otl = team_row['Overtime/Shootout Losses']
     record = f'{wins}-{losses}-{otl}'
     point_percent = str(format(team_row['Point %'], '.3f'))
     points = str(team_row['Points'])
-    goal_diff = team_row['GF'] - team_row['GA']
+    goal_diff = team_row['Goal Differential']
     if goal_diff > 0:
         goal_diff_str = f'+{goal_diff}'
     else: 

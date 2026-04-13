@@ -196,6 +196,8 @@ def make_card_data(season: str) -> None:
 
     all_cols = all_df[[
         'Team',
+        'GF',
+        'GA',
         'xGF',
         'xGA',
         'SF',
