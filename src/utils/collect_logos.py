@@ -5,7 +5,7 @@
 # Imports
 import requests
 import os
-import constants
+from utils import constants
 
 
 def scrape_logos() -> None:
@@ -28,13 +28,7 @@ def scrape_logos() -> None:
             
             if response.status_code == 200:
                 # Write the SVG content to a file
-                output_path = os.path.join('assets', 'team_logos', file_name)
+                output_path = os.path.join('data', 'assets', 'team_logos', file_name)
                 with open(output_path, 'wb') as f:
                     f.write(response.content)
                 print(f'Saved {file_name}')
-
-def main():
-    scrape_logos()
-
-if __name__ == '__main__':
-    main()
