@@ -24,7 +24,20 @@ def load_team_data(season: str, situation: str) -> pd.DataFrame:
     file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'results', file_name)
     df = pd.read_csv(file_path)
     return df
-    
+
+
+def load_standings(season: str,) -> pd.DataFrame:
+    """
+    Load standings data for a given season.
+
+    :param season: Season string ('YYYY-YYYY')
+    :return: DataFrame containing standings data
+    """
+    file_name = f'{season}_standings_data.csv'
+    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'results', file_name)
+    df = pd.read_csv(file_path)
+    return df
+
 
 def load_games(season: str) -> pd.DataFrame:
     """
