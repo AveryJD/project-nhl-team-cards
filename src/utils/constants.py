@@ -42,6 +42,9 @@ DATA_DIR = os.path.join(PROJECT_DIR, 'data')
 # CARD DATA CONSTANTS
 # ====================================================================================================
 
+# Date card data was updated on
+UPDATE_DATE = 'April 13, 2026'
+
 DATA_SEASONS = ['2025-2026']
 
 # Seasons of avalible data
@@ -52,20 +55,6 @@ SEASONS = [
     '2022-2023', '2023-2024', '2024-2025', '2025-2026'
 ]
 
-CURRENT_SEASON = ['2025-2026']
-
-# All NHL team abbreviations and full team names
-TEAM_NAMES = {
-    'ANA': 'Anaheim Ducks',        'BOS': 'Boston Bruins',        'BUF': 'Buffalo Sabres',        'CGY': 'Calgary Flames',
-    'CAR': 'Carolina Hurricanes',  'CHI': 'Chicago Blackhawks',   'COL': 'Colorado Avalanche',    'CBJ': 'Columbus Blue Jackets',
-    'DAL': 'Dallas Stars',         'DET': 'Detroit Red Wings',    'EDM': 'Edmonton Oilers',       'FLA': 'Florida Panthers',
-    'LAK': 'Los Angeles Kings',    'MIN': 'Minnesota Wild',       'MTL': 'Montreal Canadiens',    'NSH': 'Nashville Predators',
-    'NJD': 'New Jersey Devils',    'NYI': 'New York Islanders',   'NYR': 'New York Rangers',      'OTT': 'Ottawa Senators',
-    'PHI': 'Philadelphia Flyers',  'PIT': 'Pittsburgh Penguins',  'SJS': 'San Jose Sharks',       'SEA': 'Seattle Kraken',
-    'STL': 'St. Louis Blues',      'TBL': 'Tampa Bay Lightning',  'TOR': 'Toronto Maple Leafs',   'VAN': 'Vancouver Canucks',
-    'UTA': 'Utah Mammoth',         'VGK': 'Vegas Golden Knights', 'WSH': 'Washington Capitals',   'WPG': 'Winnipeg Jets',
-    'ARI': 'Arizona Coyotes',      'ATL': 'Atlanta Thrashers',    'PHX': 'Phoenix Coyotes'
-}
 
 SITUATIONS = ['all', '5v5', '4v5', '5v4']
 
@@ -76,8 +65,17 @@ SPECIAL_TEAM_MAP = {
     'TBL': 'T.B'
 }
 
+TEAM_NAME_FIXES = {
+    "St Louis Blues": "St. Louis Blues",
+    "Utah Hockey Club": "Utah Mammoth"
+}
 
-# Elo Constants
+
+
+# ====================================================================================================
+# ELO CONSTANTS
+# ====================================================================================================
+
 INITIAL_ELO = 1500
 ELO_K = 20
 ELO_S = 400
@@ -162,7 +160,20 @@ SECONDARY_COLORS = {
 # TEAMS, DIVISIONS, AND NUMBER OF GAMES PER SEASON
 # ====================================================================================================
 
+# All NHL team abbreviations and full team names
+TEAM_NAMES = {
+    'ANA': 'Anaheim Ducks',        'BOS': 'Boston Bruins',        'BUF': 'Buffalo Sabres',        'CGY': 'Calgary Flames',
+    'CAR': 'Carolina Hurricanes',  'CHI': 'Chicago Blackhawks',   'COL': 'Colorado Avalanche',    'CBJ': 'Columbus Blue Jackets',
+    'DAL': 'Dallas Stars',         'DET': 'Detroit Red Wings',    'EDM': 'Edmonton Oilers',       'FLA': 'Florida Panthers',
+    'LAK': 'Los Angeles Kings',    'MIN': 'Minnesota Wild',       'MTL': 'Montreal Canadiens',    'NSH': 'Nashville Predators',
+    'NJD': 'New Jersey Devils',    'NYI': 'New York Islanders',   'NYR': 'New York Rangers',      'OTT': 'Ottawa Senators',
+    'PHI': 'Philadelphia Flyers',  'PIT': 'Pittsburgh Penguins',  'SJS': 'San Jose Sharks',       'SEA': 'Seattle Kraken',
+    'STL': 'St. Louis Blues',      'TBL': 'Tampa Bay Lightning',  'TOR': 'Toronto Maple Leafs',   'VAN': 'Vancouver Canucks',
+    'UTA': 'Utah Mammoth',         'VGK': 'Vegas Golden Knights', 'WSH': 'Washington Capitals',   'WPG': 'Winnipeg Jets',
+    'ARI': 'Arizona Coyotes',      'ATL': 'Atlanta Thrashers',    'PHX': 'Phoenix Coyotes'
+}
 
+# Games per season
 SEASON_GAMES = {
     '2025-2026': 82,    # Current season (max games any team has played)
     '2024-2025': 82,
@@ -170,14 +181,14 @@ SEASON_GAMES = {
     '2022-2023': 82,
     '2021-2022': 82,
     '2020-2021': 56,    # Shortened due to COVID
-    '2019-2020': 70,    # Season paused due to COVID
+    '2019-2020': 71,    # Season paused due to COVID
     '2018-2019': 82,
     '2017-2018': 82,
     '2016-2017': 82,
     '2015-2016': 82,
     '2014-2015': 82,
     '2013-2014': 82,
-    '2012-2013': 82,
+    '2012-2013': 48,    # Shortened due to lockout
     '2011-2012': 82,
     '2010-2011': 82,
     '2009-2010': 82,
@@ -185,6 +196,7 @@ SEASON_GAMES = {
     '2007-2008': 82
 }
 
+# Teams per season
 SEASON_TEAM_NUM = {
     '2025-2026': 32,
     '2024-2025': 32,
@@ -207,7 +219,20 @@ SEASON_TEAM_NUM = {
     '2007-2008': 30
 }
 
-TEAM_DIVISION_UTAH = {
+# Division to conference map
+DIVISION_CONFERENCE = {
+    "Atlantic": "Eastern",
+    "Metropolitan": "Eastern",
+    "Northeast": "Eastern",
+    "Southeast": "Eastern",
+
+    "Central": "Western",
+    "Northwest": "Western",
+    "Pacific": "Western"
+}
+
+# Team to division maps
+TEAM_DIVISION_MODERN_BASE = {
     'Boston Bruins': 'Atlantic',
     'Buffalo Sabres': 'Atlantic',
     'Detroit Red Wings': 'Atlantic',
@@ -232,7 +257,6 @@ TEAM_DIVISION_UTAH = {
     'Minnesota Wild': 'Central',
     'Nashville Predators': 'Central',
     'St. Louis Blues': 'Central',
-    'Utah Mammoth': 'Central',
     'Winnipeg Jets': 'Central',
 
     'Anaheim Ducks': 'Pacific',
@@ -240,47 +264,21 @@ TEAM_DIVISION_UTAH = {
     'Edmonton Oilers': 'Pacific',
     'Los Angeles Kings': 'Pacific',
     'San Jose Sharks': 'Pacific',
-    'Seattle Kraken': 'Pacific',
     'Vancouver Canucks': 'Pacific',
-    'Vegas Golden Knights': 'Pacific'
+}
+
+TEAM_DIVISION_UTAH = {
+    **TEAM_DIVISION_MODERN_BASE,
+    'Utah Mammoth': 'Central',
+    'Seattle Kraken': 'Pacific',
+    'Vegas Golden Knights': 'Pacific',
 }
 
 TEAM_DIVISION_SEATTLE = {
-    'Boston Bruins': 'Atlantic',
-    'Buffalo Sabres': 'Atlantic',
-    'Detroit Red Wings': 'Atlantic',
-    'Florida Panthers': 'Atlantic',
-    'Montreal Canadiens': 'Atlantic',
-    'Ottawa Senators': 'Atlantic',
-    'Tampa Bay Lightning': 'Atlantic',
-    'Toronto Maple Leafs': 'Atlantic',
-
-    'Carolina Hurricanes': 'Metropolitan',
-    'Columbus Blue Jackets': 'Metropolitan',
-    'New Jersey Devils': 'Metropolitan',
-    'New York Islanders': 'Metropolitan',
-    'New York Rangers': 'Metropolitan',
-    'Philadelphia Flyers': 'Metropolitan',
-    'Pittsburgh Penguins': 'Metropolitan',
-    'Washington Capitals': 'Metropolitan',
-
+    **TEAM_DIVISION_MODERN_BASE,
     'Arizona Coyotes': 'Central',
-    'Chicago Blackhawks': 'Central',
-    'Colorado Avalanche': 'Central',
-    'Dallas Stars': 'Central',
-    'Minnesota Wild': 'Central',
-    'Nashville Predators': 'Central',
-    'St. Louis Blues': 'Central',
-    'Winnipeg Jets': 'Central',
-
-    'Anaheim Ducks': 'Pacific',
-    'Calgary Flames': 'Pacific',
-    'Edmonton Oilers': 'Pacific',
-    'Los Angeles Kings': 'Pacific',
-    'San Jose Sharks': 'Pacific',
     'Seattle Kraken': 'Pacific',
-    'Vancouver Canucks': 'Pacific',
-    'Vegas Golden Knights': 'Pacific'
+    'Vegas Golden Knights': 'Pacific',
 }
 
 TEAM_DIVISION_COVID = {
@@ -321,112 +319,19 @@ TEAM_DIVISION_COVID = {
 }
 
 TEAM_DIVISION_VEGAS = {
-    'Boston Bruins': 'Atlantic',
-    'Buffalo Sabres': 'Atlantic',
-    'Detroit Red Wings': 'Atlantic',
-    'Florida Panthers': 'Atlantic',
-    'Montreal Canadiens': 'Atlantic',
-    'Ottawa Senators': 'Atlantic',
-    'Tampa Bay Lightning': 'Atlantic',
-    'Toronto Maple Leafs': 'Atlantic',
-
-    'Carolina Hurricanes': 'Metropolitan',
-    'Columbus Blue Jackets': 'Metropolitan',
-    'New Jersey Devils': 'Metropolitan',
-    'New York Islanders': 'Metropolitan',
-    'New York Rangers': 'Metropolitan',
-    'Philadelphia Flyers': 'Metropolitan',
-    'Pittsburgh Penguins': 'Metropolitan',
-    'Washington Capitals': 'Metropolitan',
-
-    'Chicago Blackhawks': 'Central',
-    'Colorado Avalanche': 'Central',
-    'Dallas Stars': 'Central',
-    'Minnesota Wild': 'Central',
-    'Nashville Predators': 'Central',
-    'St. Louis Blues': 'Central',
-    'Winnipeg Jets': 'Central',
-
-    'Anaheim Ducks': 'Pacific',
+    **TEAM_DIVISION_MODERN_BASE,
     'Arizona Coyotes': 'Pacific',
-    'Calgary Flames': 'Pacific',
-    'Edmonton Oilers': 'Pacific',
-    'Los Angeles Kings': 'Pacific',
-    'San Jose Sharks': 'Pacific',
-    'Vancouver Canucks': 'Pacific',
-    'Vegas Golden Knights': 'Pacific'
+    'Vegas Golden Knights': 'Pacific',
 }
 
 TEAM_DIVISION_ARIZONA = {
-    'Boston Bruins': 'Atlantic',
-    'Buffalo Sabres': 'Atlantic',
-    'Detroit Red Wings': 'Atlantic',
-    'Florida Panthers': 'Atlantic',
-    'Montreal Canadiens': 'Atlantic',
-    'Ottawa Senators': 'Atlantic',
-    'Tampa Bay Lightning': 'Atlantic',
-    'Toronto Maple Leafs': 'Atlantic',
-
-    'Carolina Hurricanes': 'Metropolitan',
-    'Columbus Blue Jackets': 'Metropolitan',
-    'New Jersey Devils': 'Metropolitan',
-    'New York Islanders': 'Metropolitan',
-    'New York Rangers': 'Metropolitan',
-    'Philadelphia Flyers': 'Metropolitan',
-    'Pittsburgh Penguins': 'Metropolitan',
-    'Washington Capitals': 'Metropolitan',
-
-    'Chicago Blackhawks': 'Central',
-    'Colorado Avalanche': 'Central',
-    'Dallas Stars': 'Central',
-    'Minnesota Wild': 'Central',
-    'Nashville Predators': 'Central',
-    'St. Louis Blues': 'Central',
-    'Winnipeg Jets': 'Central',
-
-    'Anaheim Ducks': 'Pacific',
+    **TEAM_DIVISION_MODERN_BASE,
     'Arizona Coyotes': 'Pacific',
-    'Calgary Flames': 'Pacific',
-    'Edmonton Oilers': 'Pacific',
-    'Los Angeles Kings': 'Pacific',
-    'San Jose Sharks': 'Pacific',
-    'Vancouver Canucks': 'Pacific',
 }
 
 TEAM_DIVISION_PHOENIX = {
-    'Boston Bruins': 'Atlantic',
-    'Buffalo Sabres': 'Atlantic',
-    'Detroit Red Wings': 'Atlantic',
-    'Florida Panthers': 'Atlantic',
-    'Montreal Canadiens': 'Atlantic',
-    'Ottawa Senators': 'Atlantic',
-    'Tampa Bay Lightning': 'Atlantic',
-    'Toronto Maple Leafs': 'Atlantic',
-
-    'Carolina Hurricanes': 'Metropolitan',
-    'Columbus Blue Jackets': 'Metropolitan',
-    'New Jersey Devils': 'Metropolitan',
-    'New York Islanders': 'Metropolitan',
-    'New York Rangers': 'Metropolitan',
-    'Philadelphia Flyers': 'Metropolitan',
-    'Pittsburgh Penguins': 'Metropolitan',
-    'Washington Capitals': 'Metropolitan',
-
-    'Chicago Blackhawks': 'Central',
-    'Colorado Avalanche': 'Central',
-    'Dallas Stars': 'Central',
-    'Minnesota Wild': 'Central',
-    'Nashville Predators': 'Central',
-    'St. Louis Blues': 'Central',
-    'Winnipeg Jets': 'Central',
-
-    'Anaheim Ducks': 'Pacific',
-    'Calgary Flames': 'Pacific',
-    'Edmonton Oilers': 'Pacific',
-    'Los Angeles Kings': 'Pacific',
+    **TEAM_DIVISION_MODERN_BASE,
     'Phoenix Coyotes': 'Pacific',
-    'San Jose Sharks': 'Pacific',
-    'Vancouver Canucks': 'Pacific',
 }
 
 TEAM_DIVISION_WINNIPEG = {
@@ -525,15 +430,4 @@ TEAM_DIVISION_BY_SEASON = {
     '2009-2010': TEAM_DIVISION_ATLANTA,
     '2008-2009': TEAM_DIVISION_ATLANTA,
     '2007-2008': TEAM_DIVISION_ATLANTA,
-}
-
-DIVISION_CONFERENCE = {
-    "Atlantic": "Eastern",
-    "Metropolitan": "Eastern",
-    "Northeast": "Eastern",
-    "Southeast": "Eastern",
-
-    "Central": "Western",
-    "Northwest": "Western",
-    "Pacific": "Western"
 }
