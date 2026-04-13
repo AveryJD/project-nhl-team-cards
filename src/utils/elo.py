@@ -5,8 +5,8 @@
 # Imports
 import pandas as pd
 import numpy as np
-import constants
-import load_save
+from utils import constants as constants
+from utils import load_save as load_save
 
 
 DATA_DIR = constants.DATA_DIR
@@ -20,25 +20,30 @@ ELO_RESULTS = constants.ELO_RESULTS
 
 
 def get_expected_score(rating_a, rating_b, home_adv):
+
+    # Calculate expected score
     expected_score = 1 / (1 + 10**((rating_b - (rating_a + home_adv)) / ELO_S))
+
     return expected_score
 
 
 def get_margin_multiplier(goals_a, goals_b, rating_a, rating_b):
+
     # Get margin of victory
     margin = abs(goals_a - goals_b)
     # Get rating of winning and losing team
     if goals_a > goals_b:
         rating_w = rating_a
-        rlating_l = rating_b
+        rating_l = rating_b
     else:
         rating_w = rating_b
-        rlating_l = rating_a
+        rating_l = rating_a
     
     # Calculate margin multiplier
     numerator = (0.6686 * np.log(margin) + 0.8048) * 2.05
-    denominator = (rating_w - rlating_l) * 0.001 + 2.05
+    denominator = (rating_w - rating_l) * 0.001 + 2.05
     margin_multiplier = numerator / denominator
+
     return margin_multiplier
 
 
@@ -84,7 +89,7 @@ def calculate_season_elo(season):
         team_one = game.iloc[0]['Team']
         team_two = game.iloc[1]['Team']
 
-        if home_team_name in team_one:          # Fix Utah Hockey Club and Coyotes team?
+        if home_team_name in team_one:
             home_team = team_one
             away_team = team_two
         else:
@@ -147,21 +152,9 @@ def calculate_season_elo(season):
 
     # Save Elo results
     for team, history in elo_history.items():
-        team_abreviation = inverted_team_dict.get(team)
+        team_abbreviation = inverted_team_dict.get(team)
         team_df = pd.DataFrame(history, columns=["Game", "Elo"])
-        file_name = f'{season}_{team_abreviation}_elo.csv'
+        file_name = f'{season}_{team_abbreviation}_elo.csv'
         load_save.save_csv(team_df, season, 'elo', file_name)
 
     return None
-
-
-
-def main():
-    # Calculate the Elo history of every team for every season
-    seasons = constants.SEASONS
-    for season in seasons:
-        calculate_season_elo(season)
-
-
-if __name__ == '__main__':
-    main()
