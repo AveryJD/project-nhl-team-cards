@@ -58,17 +58,6 @@ SEASONS = [
 
 SITUATIONS = ['all', '5v5', '4v5', '5v4']
 
-SPECIAL_TEAM_MAP = {
-    'LAK': 'L.A',
-    'NJD': 'N.J',
-    'SJS': 'S.J',
-    'TBL': 'T.B'
-}
-
-TEAM_NAME_FIXES = {
-    "St Louis Blues": "St. Louis Blues",
-    "Utah Hockey Club": "Utah Mammoth"
-}
 
 
 
@@ -173,6 +162,49 @@ TEAM_NAMES = {
     'ARI': 'Arizona Coyotes',      'ATL': 'Atlanta Thrashers',    'PHX': 'Phoenix Coyotes'
 }
 
+TEAM_NAME_FIXES = {
+    'St Louis Blues': 'St. Louis Blues',
+    'Utah Hockey Club': 'Utah Mammoth',
+}
+
+GAME_TEAM_NAME_FIXES = {
+    'Avalanche': 'Colorado Avalanche',
+    'Blackhawks': 'Chicago Blackhawks',
+    'Blue Jackets': 'Columbus Blue Jackets',
+    'Blues': 'St. Louis Blues',
+    'Bruins': 'Boston Bruins',
+    'Canadiens': 'Montreal Canadiens',
+    'Canucks': 'Vancouver Canucks',
+    'Capitals': 'Washington Capitals',
+    'Coyotes': 'Arizona Coyotes', # Phoenix Coyotes before 2014-2015
+    'Devils': 'New Jersey Devils',
+    'Ducks': 'Anaheim Ducks',
+    'Flames': 'Calgary Flames',
+    'Flyers': 'Philadelphia Flyers',
+    'Golden Knights': 'Vegas Golden Knights',
+    'Utah HC': 'Utah Mammoth',
+    'Hurricanes': 'Carolina Hurricanes',
+    'Islanders': 'New York Islanders',
+    'Kings': 'Los Angeles Kings',
+    'Kraken': 'Seattle Kraken',
+    'Jets': 'Winnipeg Jets',
+    'Lightning': 'Tampa Bay Lightning',
+    'Mammoth': 'Utah Mammoth',
+    'Maple Leafs': 'Toronto Maple Leafs',
+    'Oilers': 'Edmonton Oilers',
+    'Panthers': 'Florida Panthers',
+    'Penguins': 'Pittsburgh Penguins',
+    'Predators': 'Nashville Predators',
+    'Rangers': 'New York Rangers',
+    'Red Wings': 'Detroit Red Wings',
+    'Sabres': 'Buffalo Sabres',
+    'Senators': 'Ottawa Senators',
+    'Sharks': 'San Jose Sharks',
+    'Stars': 'Dallas Stars',
+    'Thrashers': 'Atlanta Thrashers',
+    'Wild': 'Minnesota Wild',
+}
+
 # Games per season
 SEASON_GAMES = {
     '2025-2026': 82,    # Current season (max games any team has played)
@@ -221,14 +253,14 @@ SEASON_TEAM_NUM = {
 
 # Division to conference map
 DIVISION_CONFERENCE = {
-    "Atlantic": "Eastern",
-    "Metropolitan": "Eastern",
-    "Northeast": "Eastern",
-    "Southeast": "Eastern",
+    'Atlantic': 'Eastern',
+    'Metropolitan': 'Eastern',
+    'Northeast': 'Eastern',
+    'Southeast': 'Eastern',
 
-    "Central": "Western",
-    "Northwest": "Western",
-    "Pacific": "Western"
+    'Central': 'Western',
+    'Northwest': 'Western',
+    'Pacific': 'Western'
 }
 
 # Team to division maps
@@ -282,40 +314,40 @@ TEAM_DIVISION_SEATTLE = {
 }
 
 TEAM_DIVISION_COVID = {
-    "Calgary Flames": "North",
-    "Edmonton Oilers": "North",
-    "Montreal Canadiens": "North",
-    "Ottawa Senators": "North",
-    "Toronto Maple Leafs": "North",
-    "Vancouver Canucks": "North",
-    "Winnipeg Jets": "North",
+    'Calgary Flames': 'North',
+    'Edmonton Oilers': 'North',
+    'Montreal Canadiens': 'North',
+    'Ottawa Senators': 'North',
+    'Toronto Maple Leafs': 'North',
+    'Vancouver Canucks': 'North',
+    'Winnipeg Jets': 'North',
 
-    "Boston Bruins": "East",
-    "Buffalo Sabres": "East",
-    "New Jersey Devils": "East",
-    "New York Islanders": "East",
-    "New York Rangers": "East",
-    "Philadelphia Flyers": "East",
-    "Pittsburgh Penguins": "East",
-    "Washington Capitals": "East",
+    'Boston Bruins': 'East',
+    'Buffalo Sabres': 'East',
+    'New Jersey Devils': 'East',
+    'New York Islanders': 'East',
+    'New York Rangers': 'East',
+    'Philadelphia Flyers': 'East',
+    'Pittsburgh Penguins': 'East',
+    'Washington Capitals': 'East',
 
-    "Carolina Hurricanes": "Central",
-    "Chicago Blackhawks": "Central",
-    "Columbus Blue Jackets": "Central",
-    "Dallas Stars": "Central",
-    "Detroit Red Wings": "Central",
-    "Florida Panthers": "Central",
-    "Nashville Predators": "Central",
-    "Tampa Bay Lightning": "Central",
+    'Carolina Hurricanes': 'Central',
+    'Chicago Blackhawks': 'Central',
+    'Columbus Blue Jackets': 'Central',
+    'Dallas Stars': 'Central',
+    'Detroit Red Wings': 'Central',
+    'Florida Panthers': 'Central',
+    'Nashville Predators': 'Central',
+    'Tampa Bay Lightning': 'Central',
 
-    "Anaheim Ducks": "West",
-    "Arizona Coyotes": "West",
-    "Colorado Avalanche": "West",
-    "Los Angeles Kings": "West",
-    "Minnesota Wild": "West",
-    "St. Louis Blues": "West",
-    "San Jose Sharks": "West",
-    "Vegas Golden Knights": "West"
+    'Anaheim Ducks': 'West',
+    'Arizona Coyotes': 'West',
+    'Colorado Avalanche': 'West',
+    'Los Angeles Kings': 'West',
+    'Minnesota Wild': 'West',
+    'St. Louis Blues': 'West',
+    'San Jose Sharks': 'West',
+    'Vegas Golden Knights': 'West'
 }
 
 TEAM_DIVISION_VEGAS = {
@@ -335,79 +367,79 @@ TEAM_DIVISION_PHOENIX = {
 }
 
 TEAM_DIVISION_WINNIPEG = {
-    "New Jersey Devils": "Atlantic",
-    "New York Islanders": "Atlantic",
-    "New York Rangers": "Atlantic",
-    "Philadelphia Flyers": "Atlantic",
-    "Pittsburgh Penguins": "Atlantic",
+    'New Jersey Devils': 'Atlantic',
+    'New York Islanders': 'Atlantic',
+    'New York Rangers': 'Atlantic',
+    'Philadelphia Flyers': 'Atlantic',
+    'Pittsburgh Penguins': 'Atlantic',
 
-    "Boston Bruins": "Northeast",
-    "Buffalo Sabres": "Northeast",
-    "Montreal Canadiens": "Northeast",
-    "Ottawa Senators": "Northeast",
-    "Toronto Maple Leafs": "Northeast",
+    'Boston Bruins': 'Northeast',
+    'Buffalo Sabres': 'Northeast',
+    'Montreal Canadiens': 'Northeast',
+    'Ottawa Senators': 'Northeast',
+    'Toronto Maple Leafs': 'Northeast',
 
-    "Carolina Hurricanes": "Southeast",
-    "Florida Panthers": "Southeast",
-    "Tampa Bay Lightning": "Southeast",
-    "Washington Capitals": "Southeast",
-    "Winnipeg Jets": "Southeast",
+    'Carolina Hurricanes': 'Southeast',
+    'Florida Panthers': 'Southeast',
+    'Tampa Bay Lightning': 'Southeast',
+    'Washington Capitals': 'Southeast',
+    'Winnipeg Jets': 'Southeast',
 
-    "Chicago Blackhawks": "Central",
-    "Columbus Blue Jackets": "Central",
-    "Detroit Red Wings": "Central",
-    "Nashville Predators": "Central",
-    "St. Louis Blues": "Central",
+    'Chicago Blackhawks': 'Central',
+    'Columbus Blue Jackets': 'Central',
+    'Detroit Red Wings': 'Central',
+    'Nashville Predators': 'Central',
+    'St. Louis Blues': 'Central',
 
-    "Calgary Flames": "Northwest",
-    "Colorado Avalanche": "Northwest",
-    "Edmonton Oilers": "Northwest",
-    "Minnesota Wild": "Northwest",
-    "Vancouver Canucks": "Northwest",
+    'Calgary Flames': 'Northwest',
+    'Colorado Avalanche': 'Northwest',
+    'Edmonton Oilers': 'Northwest',
+    'Minnesota Wild': 'Northwest',
+    'Vancouver Canucks': 'Northwest',
 
-    "Anaheim Ducks": "Pacific",
-    "Dallas Stars": "Pacific",
-    "Los Angeles Kings": "Pacific",
-    "Phoenix Coyotes": "Pacific",
-    "San Jose Sharks": "Pacific",
+    'Anaheim Ducks': 'Pacific',
+    'Dallas Stars': 'Pacific',
+    'Los Angeles Kings': 'Pacific',
+    'Phoenix Coyotes': 'Pacific',
+    'San Jose Sharks': 'Pacific',
 }
 
 TEAM_DIVISION_ATLANTA = {
-    "New Jersey Devils": "Atlantic",
-    "New York Islanders": "Atlantic",
-    "New York Rangers": "Atlantic",
-    "Philadelphia Flyers": "Atlantic",
-    "Pittsburgh Penguins": "Atlantic",
+    'New Jersey Devils': 'Atlantic',
+    'New York Islanders': 'Atlantic',
+    'New York Rangers': 'Atlantic',
+    'Philadelphia Flyers': 'Atlantic',
+    'Pittsburgh Penguins': 'Atlantic',
 
-    "Boston Bruins": "Northeast",
-    "Buffalo Sabres": "Northeast",
-    "Montreal Canadiens": "Northeast",
-    "Ottawa Senators": "Northeast",
-    "Toronto Maple Leafs": "Northeast",
+    'Boston Bruins': 'Northeast',
+    'Buffalo Sabres': 'Northeast',
+    'Montreal Canadiens': 'Northeast',
+    'Ottawa Senators': 'Northeast',
+    'Toronto Maple Leafs': 'Northeast',
 
-    "Atlanta Thrashers": "Southeast",
-    "Carolina Hurricanes": "Southeast",
-    "Florida Panthers": "Southeast",
-    "Tampa Bay Lightning": "Southeast",
-    "Washington Capitals": "Southeast",
+    'Atlanta Thrashers': 'Southeast',
+    'Carolina Hurricanes': 'Southeast',
+    'Florida Panthers': 'Southeast',
+    'Tampa Bay Lightning': 'Southeast',
+    'Washington Capitals': 'Southeast',
 
-    "Chicago Blackhawks": "Central",
-    "Columbus Blue Jackets": "Central",
-    "Detroit Red Wings": "Central",
-    "Nashville Predators": "Central",
-    "St. Louis Blues": "Central",
+    'Chicago Blackhawks': 'Central',
+    'Columbus Blue Jackets': 'Central',
+    'Detroit Red Wings': 'Central',
+    'Nashville Predators': 'Central',
+    'St. Louis Blues': 'Central',
 
-    "Calgary Flames": "Northwest",
-    "Colorado Avalanche": "Northwest",
-    "Edmonton Oilers": "Northwest",
-    "Minnesota Wild": "Northwest",
-    "Vancouver Canucks": "Northwest",
+    'Calgary Flames': 'Northwest',
+    'Colorado Avalanche': 'Northwest',
+    'Edmonton Oilers': 'Northwest',
+    'Minnesota Wild': 'Northwest',
+    'Vancouver Canucks': 'Northwest',
 
-    "Anaheim Ducks": "Pacific",
-    "Dallas Stars": "Pacific",
-    "Los Angeles Kings": "Pacific",
-    "Phoenix Coyotes": "Pacific",
-    "San Jose Sharks": "Pacific",
+    'Anaheim Ducks': 'Pacific',
+    'Dallas Stars': 'Pacific',
+    'Los Angeles Kings': 'Pacific',
+    'Phoenix Coyotes': 'Pacific',
+    'San Jose Sharks': 'Pacific',
 }
 
 TEAM_DIVISION_BY_SEASON = {

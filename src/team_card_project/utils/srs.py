@@ -46,40 +46,17 @@ def calculate_srs(df: pd.DataFrame) -> pd.DataFrame:
     :return: DataFrame containing each team's SRS rating
     """
 
-    # Group rows by game and collect team names
-    grouped = df.groupby('Game')
-    teams = sorted(df['Team'].unique())
-    team_to_idx = {team: i for i, team in enumerate(teams)}
-    num_teams = len(teams)
-
+    # Get all teams that played in the given season
+    teams_in_season = sorted(set(df["Home Team"].unique()))
+    team_to_idx = {team: i for i, team in enumerate(teams_in_season)}
+    num_teams = len(teams_in_season)
     games = []
 
-    # Get home team, away team, and goal margin for each game
-    for _, group in grouped:
-
-        game_name = group.iloc[0]['Game']
-        home_team_name = game_name[5]
-
-        team_one = group.iloc[0]['Team']
-
-        # Determine which row corresponds to the home team
-        if team_one.split()[1] == home_team_name:
-            away_index = 0
-            home_index = 1
-        else:
-            away_index = 1
-            home_index = 0
-
-        away_team = group.iloc[away_index]
-        home_team = group.iloc[home_index]
-
-        # Calculate goal margin (home - away)
-        margin = home_team['GF'] - away_team['GF']
-
+    for _, row in df.iterrows():
         games.append({
-            "home_idx": team_to_idx[home_team["Team"]],
-            "away_idx": team_to_idx[away_team["Team"]],
-            "margin": margin
+            "home_idx": team_to_idx[row["Home Team"]],
+            "away_idx": team_to_idx[row["Away Team"]],
+            "margin": row["Home Score"] - row["Away Score"]
         })
 
     # Constrain ratings so the average rating equals zero
@@ -101,7 +78,7 @@ def calculate_srs(df: pd.DataFrame) -> pd.DataFrame:
     results = []
 
     # Store results for each team
-    for i, team in enumerate(teams):
+    for i, team in enumerate(teams_in_season):
         results.append({
             "Team": team,
             "SRS Rating": round(ratings_final[i], 3)

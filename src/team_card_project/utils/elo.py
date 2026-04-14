@@ -20,6 +20,14 @@ ELO_RESULTS = constants.ELO_RESULTS
 
 
 def get_expected_score(rating_a, rating_b, home_adv):
+    """
+    Calculate the expected result for team A.
+
+    :param rating_a: Rating of team A
+    :param rating_b: Rating of team B
+    :param home_adv: Home-ice advantage to apply to team A
+    :return: Expected score for team A
+    """
 
     # Calculate expected score
     expected_score = 1 / (1 + 10**((rating_b - (rating_a + home_adv)) / ELO_S))
@@ -28,6 +36,15 @@ def get_expected_score(rating_a, rating_b, home_adv):
 
 
 def get_margin_multiplier(goals_a, goals_b, rating_a, rating_b):
+    """
+    Calculate the Elo margin-of-victory multiplier.
+
+    :param goals_a: Goals scored by team A
+    :param goals_b: Goals scored by team B
+    :param rating_a: Rating of team A
+    :param rating_b: Rating of team B
+    :return: Margin multiplier
+    """
 
     # Get margin of victory
     margin = abs(goals_a - goals_b)
@@ -48,53 +65,33 @@ def get_margin_multiplier(goals_a, goals_b, rating_a, rating_b):
 
 
 def calculate_season_elo(season):
+    """
+    Calculate and save Elo ratings for a given season.
+
+    :param season: Season string formatted as 'YYYY-YYYY'
+    :return: None
+    """
 
     # Load games data
-    df = load_save.load_games(season)
+    games_df = load_save.load_games(season)
 
     # Get all teams that played in the given season
-    teams_in_season = df['Team'].unique()
+    teams_in_season = games_df['Home Team'].unique()
 
     # Initialize all Elo ratings at 1500
     current_ratings = {team: INITIAL_ELO for team in teams_in_season}
 
     # Initialize game counter and Elo ratings list for tracking
     team_game_counts = {team: 0 for team in teams_in_season}
-    elo_history = {team: [] for team in teams_in_season}
-
-    # Add initial Elo as game 0
-    for team in teams_in_season:
-        elo_history[team].append((0, INITIAL_ELO))
-
-    # Group same games together (in data, each game appears twice)
-    games = df.groupby('Game', sort=False)
+    elo_history = {team: [(0, INITIAL_ELO)] for team in teams_in_season}
 
     # For every game
-    for _, game in games:
+    for _, game_row in games_df.iterrows():
         # Get the home and away team names and scores from the game result string
-        game_string = game.iloc[0]['Game']
-
-        _, teams_part = game_string.split(' - ')
-        away_part, home_part = teams_part.split(',')
-
-        away_tokens = away_part.strip().split()
-        home_tokens = home_part.strip().split()
-
-        away_team_name = ' '.join(away_tokens[:-1])
-        away_team_score = int(away_tokens[-1])
-
-        home_team_name = ' '.join(home_tokens[:-1])
-        home_team_score = int(home_tokens[-1])
-
-        team_one = game.iloc[0]['Team']
-        team_two = game.iloc[1]['Team']
-
-        if home_team_name in team_one:
-            home_team = team_one
-            away_team = team_two
-        else:
-            home_team = team_two
-            away_team = team_one
+        home_team = game_row["Home Team"]
+        away_team = game_row["Away Team"]
+        home_team_score = int(game_row["Home Score"])
+        away_team_score = int(game_row["Away Score"])
 
         # Get the ratings of both teams
         home_rating = current_ratings[home_team]
@@ -104,9 +101,10 @@ def calculate_season_elo(season):
         expected_home = get_expected_score(home_rating, away_rating, HOME_ADV)
 
         # Get the actual result based on score and when the game ended
-        toi = game.iloc[0]['TOI']
+        toi = game_row['TOI']
         minutes, seconds = map(int, toi.split(':'))
         game_time = minutes + seconds / 60
+
         is_shootout = False
         if home_team_score > away_team_score and game_time <= 60:
             result_home = ELO_RESULTS.get('R Win')

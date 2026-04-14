@@ -129,10 +129,6 @@ def make_card_data(season: str) -> None:
 
     standings_df = load_save.load_standings(season)
 
-    # Fix team name formatting
-    for df in [all_df, ev_df, pp_df, pk_df, standings_df]:
-        df["Team"] = df["Team"].replace(constants.TEAM_NAME_FIXES)
-
     # Initialize dictionary with empty lists for all teams
     srs_rows = {team_name: [] for team_name in constants.TEAM_NAMES.values()}
 
