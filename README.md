@@ -45,6 +45,11 @@ source venv/bin/activate  # On Windows: venv\\Scripts\\activate
 pip install -r requirements.txt
 ```
 
+4. **Install package locally:**
+```bash
+pip install -e .
+```
+
 
 ## Usage
 The typical workflow is:
@@ -66,7 +71,7 @@ DATA_SEASONS = ['2024-2025', '2023-2024', '2022-2023', '2021-2022', '2020-2021',
 
 Execute the following script:
 ```bash
-python src/collect_data.py
+python -m team_card_project.collect_data
 ```
 
 This script will:
@@ -84,7 +89,7 @@ All scraped data CSV files will be saved to the respective season folder in the 
 ### Step 2: Generate Analytics and Card Data
 This step transforms raw data into team rankings and structured card-ready datasets.
 
-Open utils/constants.py and set the seasons you want to process (Natural Stat Trick's earliest season is 2007-2008):
+Open src/team_card_project/utils/constants.py and set the seasons you want to process (Natural Stat Trick's earliest season is 2007-2008):
 ```python
 # Seasons to scrape team data for
 DATA_SEASONS = ['2024-2025', '2023-2024', '2022-2023', '2021-2022', '2020-2021', '2019-2020',
@@ -94,7 +99,7 @@ DATA_SEASONS = ['2024-2025', '2023-2024', '2022-2023', '2021-2022', '2020-2021',
 
 Execute the following script:
 ```bash
-python src/prepare_data.py
+python -m team_card_project.prepare_data
 ```
 
 This script will:
@@ -121,7 +126,7 @@ Available card generation options include:
 
 Execute the following script:
 ```bash
-python src/generate_cards.py
+python -m team_card_project.generate_cards
 ```
 
 Generated card PNGs will be saved to the 'team_cards' folder.
