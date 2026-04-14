@@ -21,7 +21,7 @@ def load_team_data(season: str, situation: str) -> pd.DataFrame:
     :return: DataFrame containing team statistics
     """
     file_name = f'{season}_{situation}_team_data.csv'
-    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'results', file_name)
+    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'scraped_data', file_name)
     df = pd.read_csv(file_path)
     return df
 
@@ -34,7 +34,7 @@ def load_standings(season: str,) -> pd.DataFrame:
     :return: DataFrame containing standings data
     """
     file_name = f'{season}_standings.csv'
-    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'results', file_name)
+    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'scraped_data', file_name)
     df = pd.read_csv(file_path)
     return df
 
@@ -47,7 +47,7 @@ def load_games(season: str) -> pd.DataFrame:
     :return: DataFrame containing game results
     """
     file_name = f'{season}_games.csv'
-    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'results', file_name)
+    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'scraped_data', file_name)
     df = pd.read_csv(file_path)
     return df
     
@@ -60,7 +60,7 @@ def load_srs(season: str) -> pd.DataFrame:
     :return: DataFrame containing SRS values
     """
     file_name = f'{season}_srs.csv'
-    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'results', file_name)
+    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'ratings', file_name)
     df = pd.read_csv(file_path)
     return df
     
@@ -74,7 +74,7 @@ def load_elo(season: str, team: str) -> pd.DataFrame:
     :return: DataFrame containing Elo ratings over the season
     """
     file_name = f'{season}_{team}_elo.csv'
-    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'elo', file_name)
+    file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'ratings', file_name)
     df = pd.read_csv(file_path)
     return df
 

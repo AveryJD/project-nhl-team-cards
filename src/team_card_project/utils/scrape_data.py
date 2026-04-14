@@ -87,7 +87,7 @@ def scrape_team_data(season: str, situation: str) -> None:
 
     # Save as a CSV
     file_name = f'{season}_{situation}_team_data.csv'
-    load_save.save_csv(df, season, 'results', file_name)
+    load_save.save_csv(df, season, 'scraped_data', file_name)
 
     return None
 
@@ -114,7 +114,7 @@ def scrape_standings_data(season: str) -> None:
 
     # Save as a CSV
     file_name = f'{season}_standings.csv'
-    load_save.save_csv(df, season, 'results', file_name)
+    load_save.save_csv(df, season, 'scraped_data', file_name)
 
     return None
 
@@ -134,6 +134,6 @@ def scrape_games_data(season: str) -> None:
 
     # Save as a CSV
     file_name = f'{season}_games.csv'
-    load_save.save_csv(df, season, 'results', file_name)
+    load_save.save_csv(df, season, 'scraped_data', file_name)
 
     return None

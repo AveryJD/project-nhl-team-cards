@@ -121,9 +121,6 @@ def calculate_season_srs(season: str) -> None:
     # Load game  results
     games_df = load_save.load_games(season)
 
-    # Fix inconsistent team names
-    games_df["Team"] = games_df["Team"].replace(constants.TEAM_NAME_FIXES)
-
     # Calculate Simple Rating System ratings
     srs_df = calculate_srs(games_df)
 
@@ -136,6 +133,6 @@ def calculate_season_srs(season: str) -> None:
 
     # Save SRS results
     file_name = f"{season}_srs.csv"
-    load_save.save_csv(srs_df, season, 'results', file_name)
+    load_save.save_csv(srs_df, season, 'ratings', file_name)
 
     return None

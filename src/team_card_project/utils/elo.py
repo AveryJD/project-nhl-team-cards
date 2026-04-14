@@ -155,6 +155,6 @@ def calculate_season_elo(season):
         team_abbreviation = inverted_team_dict.get(team)
         team_df = pd.DataFrame(history, columns=["Game", "Elo"])
         file_name = f'{season}_{team_abbreviation}_elo.csv'
-        load_save.save_csv(team_df, season, 'elo', file_name)
+        load_save.save_csv(team_df, season, 'ratings', file_name)
 
     return None
