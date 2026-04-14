@@ -43,7 +43,7 @@ DATA_DIR = os.path.join(PROJECT_DIR, 'data')
 # ====================================================================================================
 
 # Date card data was updated on
-UPDATE_DATE = 'April 13, 2026'
+UPDATE_DATE = 'April 12, 2026'
 
 DATA_SEASONS = ['2025-2026']
 
