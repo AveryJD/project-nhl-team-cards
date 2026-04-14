@@ -3,8 +3,8 @@
 # ====================================================================================================
 
 # Imports
-from utils import card_generation
-from utils import constants
+from team_card_project.utils import card_generation
+from team_card_project.utils import constants
 
 """
 Different functions for generating player cards:

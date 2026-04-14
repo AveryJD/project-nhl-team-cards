@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw, ImageFont
 import io
 import os
-from utils import constants
-from utils import load_save
+from team_card_project.utils import constants
+from team_card_project.utils import load_save
 
 
 DATA_DIR = constants.DATA_DIR

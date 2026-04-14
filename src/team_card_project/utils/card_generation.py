@@ -3,8 +3,8 @@
 # ====================================================================================================
 
 # Imports
-from utils import card_functions as cf
-from utils import constants
+from team_card_project.utils import card_functions as cf
+from team_card_project.utils import constants
 
 DATA_DIR = constants.DATA_DIR
 

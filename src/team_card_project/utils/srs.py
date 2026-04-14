@@ -6,8 +6,8 @@
 import pandas as pd
 import numpy as np
 from scipy.optimize import minimize
-from utils import constants
-from utils import load_save
+from team_card_project.utils import constants
+from team_card_project.utils import load_save
 
 
 DATA_DIR = constants.DATA_DIR

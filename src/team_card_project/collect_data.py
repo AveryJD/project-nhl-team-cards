@@ -3,9 +3,9 @@
 # ====================================================================================================
 
 # Imports
-from utils import scrape_data
-from utils import collect_logos
-from utils import constants
+from team_card_project.utils import scrape_data
+from team_card_project.utils import collect_logos
+from team_card_project.utils import constants
 
 
 # Scrape logos from NHL.com

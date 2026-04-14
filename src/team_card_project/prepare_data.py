@@ -3,10 +3,10 @@
 # ====================================================================================================
 
 # Imports
-from utils import elo
-from utils import srs
-from utils import card_data
-from utils import constants
+from team_card_project.utils import elo
+from team_card_project.utils import srs
+from team_card_project.utils import card_data
+from team_card_project.utils import constants
 
 
 # Generate team analytics and assemble card data

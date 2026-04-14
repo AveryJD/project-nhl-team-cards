@@ -5,7 +5,7 @@
 # Imports
 import requests
 import os
-from utils import constants
+from team_card_project.utils import constants
 
 
 def scrape_logos() -> None:

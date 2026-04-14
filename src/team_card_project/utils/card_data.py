@@ -4,8 +4,8 @@
 
 # Imports
 import pandas as pd
-from utils import constants
-from utils import load_save
+from team_card_project.utils import constants
+from team_card_project.utils import load_save
 
 
 def make_league_rankings(all_df: pd.DataFrame, season: str) -> pd.DataFrame:
