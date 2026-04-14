@@ -10,7 +10,7 @@ from team_card_project.utils import constants
 
 
 # Generate team analytics and assemble card data
-for season in constants.DATA_SEASONS:
+for season in constants.CARD_SEASONS:
     # Generate Elo ratings history
     elo.calculate_season_elo(season)
 

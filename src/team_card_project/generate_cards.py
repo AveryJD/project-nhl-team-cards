@@ -14,5 +14,5 @@ card_generation.make_all_team_cards('2025-2026', 'dark')
 """
 
 # Generate all team cards
-for season in constants.DATA_SEASONS:
+for season in ['2025-2026']:
     card_generation.make_all_team_cards(season, 'dark')

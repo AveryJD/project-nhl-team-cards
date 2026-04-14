@@ -45,19 +45,27 @@ DATA_DIR = os.path.join(PROJECT_DIR, 'data')
 # Date card data was updated on
 UPDATE_DATE = 'April 12, 2026'
 
-DATA_SEASONS = ['2025-2026']
+# Situations to scrape team data for
+SITUATIONS = ['all', '5v5', '4v5', '5v4']
 
-# Seasons of avalible data
-SEASONS = [
+# Seasons to scrape data for
+SCRAPE_SEASONS = ['2025-2026']
+
+# Seasons to gather card data for
+CARD_SEASONS = [
     '2007-2008', '2008-2009', '2009-2010', '2010-2011', '2011-2012', 
     '2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017', 
     '2017-2018', '2018-2019', '2019-2020', '2020-2021', '2021-2022', 
     '2022-2023', '2023-2024', '2024-2025', '2025-2026'
 ]
 
-
-SITUATIONS = ['all', '5v5', '4v5', '5v4']
-
+# All seasons of avalible data
+ALL_SEASONS = [
+    '2007-2008', '2008-2009', '2009-2010', '2010-2011', '2011-2012', 
+    '2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017', 
+    '2017-2018', '2018-2019', '2019-2020', '2020-2021', '2021-2022', 
+    '2022-2023', '2023-2024', '2024-2025', '2025-2026'
+]
 
 
 
