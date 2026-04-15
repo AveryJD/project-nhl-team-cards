@@ -138,7 +138,11 @@ def make_card_data(season: str) -> None:
         try:
             all_srs_df = load_save.load_srs(cur_season)
             for team_full_name in constants.TEAM_NAMES.values():
-                row = all_srs_df[all_srs_df["Team"] == team_full_name]
+                if team_full_name == "Arizona Coyotes" and cur_season <= "2013-2014":
+                    row = all_srs_df[all_srs_df["Team"] == "Phoenix Coyotes"]
+                else:
+                    row = all_srs_df[all_srs_df["Team"] == team_full_name]
+
                 if not row.empty:
                     srs_rows[team_full_name].insert(0, row.iloc[0]["SRS Rank"])
                 else:

@@ -43,7 +43,7 @@ DATA_DIR = os.path.join(PROJECT_DIR, 'data')
 # ====================================================================================================
 
 # Date card data was updated on
-UPDATE_DATE = 'April 12, 2026'
+UPDATE_DATE = 'April 17, 2026'
 
 # Situations to scrape team data for
 SITUATIONS = ['all', '5v5', '4v5', '5v4']
