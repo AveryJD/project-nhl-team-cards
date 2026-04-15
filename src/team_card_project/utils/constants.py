@@ -80,10 +80,10 @@ ELO_HOME_ADV = 30
 
 ELO_RESULTS = {
     'R Win': 1.0,
-    'OT Win': 0.8,
-    'SO Win': 0.6,
-    'SO Loss': 0.4,
-    'OT Loss': 0.2,
+    'OT Win': 0.9,
+    'SO Win': 0.7,
+    'SO Loss': 0.3,
+    'OT Loss': 0.1,
     'R Loss': 0.0
 }
 

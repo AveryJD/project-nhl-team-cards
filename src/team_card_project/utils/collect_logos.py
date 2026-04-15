@@ -15,7 +15,7 @@ def scrape_logos() -> None:
 
     :return: None
     """
-    os.makedirs('assets/team_logos', exist_ok=True)
+    os.makedirs('data/assets/team_logos', exist_ok=True)
     
     for team_code in constants.TEAM_NAMES:
         for variant in ['light', 'dark']:
