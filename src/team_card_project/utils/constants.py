@@ -49,7 +49,7 @@ UPDATE_DATE = 'April 17, 2026'
 SITUATIONS = ['all', '5v5', '4v5', '5v4']
 
 # Seasons to scrape data for
-SCRAPE_SEASONS = ['2025-2026']
+DATA_SEASONS = ['2025-2026']
 
 # Seasons to gather card data for
 CARD_SEASONS = [
