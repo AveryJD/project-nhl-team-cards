@@ -26,7 +26,7 @@ HEADING_FONT_PATH = f'{DATA_DIR}/assets/fonts/header.ttf'
 
 FONT_CACHE = {
     'basic_40': ImageFont.truetype(BASIC_FONT_PATH, 40),
-    'basic_50': ImageFont.truetype(BASIC_FONT_PATH, 50),
+    'basic_60': ImageFont.truetype(BASIC_FONT_PATH, 60),
     'basic_73': ImageFont.truetype(BASIC_FONT_PATH, 73),
     'basic_150': ImageFont.truetype(BASIC_FONT_PATH, 150),
     'heading_70': ImageFont.truetype(HEADING_FONT_PATH, 70),
@@ -53,15 +53,13 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     if mode == 'light':
         background_color = constants.WHITE
         text_color = constants.DARK
-        secondary_team_color = constants.SECONDARY_COLORS.get(team_abbrev)
     else:
         background_color = constants.DARK
         text_color = constants.WHITE
-        secondary_team_color = constants.WHITE
     primary_team_color = constants.PRIMARY_COLORS.get(team_abbrev)
     header_text_color = constants.WHITE
     header_shadow_color = constants.SECONDARY_COLORS.get(team_abbrev)
-    
+
     
     # Get standings variables
     wins = team_row['Wins']
@@ -84,14 +82,14 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
         conf_rank = 'N/A'
     league_rank = inflect_engine.ordinal(int(team_row['League Rank']))
 
-    # Get stats variables
-    goals_for_percent = str(format(team_row['EV_GF%'], '.3f'))
-    xgoals_for_percent = str(format(team_row['EV_xGF%'], '.3f'))
-    shots_for_percent = str(format(team_row['EV_SF%'], '.3f'))
-    corsi_for_percent = str(format(team_row['EV_CF%'], '.3f'))
-    fenwick_for_percent = str(format(team_row['EV_FF%'], '.3f'))
-    shooting_percentage = str(format(team_row['EV_SH%'], '.3f'))
-    save_percentage = str(format(team_row['EV_SV%'], '.3f'))
+    # Get stats variables, each with its league-wide rank
+    goals_for_percent = f"{format(team_row['EV_GF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['gf_pct_rank']))})"
+    xgoals_for_percent = f"{format(team_row['EV_xGF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['xgf_pct_rank']))})"
+    shots_for_percent = f"{format(team_row['EV_SF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['sf_pct_rank']))})"
+    corsi_for_percent = f"{format(team_row['EV_CF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['cf_pct_rank']))})"
+    fenwick_for_percent = f"{format(team_row['EV_FF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['ff_pct_rank']))})"
+    shooting_percentage = f"{format(team_row['EV_SH%'], '.3f')} ({inflect_engine.ordinal(int(team_row['sh_pct_rank']))})"
+    save_percentage = f"{format(team_row['EV_SV%'], '.3f')} ({inflect_engine.ordinal(int(team_row['sv_pct_rank']))})"
 
     # Create header section card
     header_section_width = 2000
@@ -114,48 +112,50 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     header_section.paste(team_logo, (-25, 150), team_logo)
 
     # Load fonts
-    basic_font = FONT_CACHE['basic_50']
+    basic_font = FONT_CACHE['basic_60']
     subheading_font = FONT_CACHE['heading_70']
     heading_font = FONT_CACHE['heading_116']
 
- 
+    # Row y positions
+    row_ys = [230, 287, 344, 401, 458, 515, 572]
+
     # Draw team standings text
-    ch.draw_centered_text(draw, text='Standings', font=subheading_font, y_position=190, x_center=1000, fill=text_color)
+    ch.draw_centered_text(draw, text='Standings', font=subheading_font, y_position=170, x_center=1000, fill=text_color)
 
-    ch.draw_righted_text(draw, text='Record:', font=basic_font, y_position=250, x_right=975, fill=text_color)
-    ch.draw_righted_text(draw, text='Points %:', font=basic_font, y_position=300, x_right=975, fill=text_color)
-    ch.draw_righted_text(draw, text='Points:', font=basic_font, y_position=350, x_right=975, fill=text_color)
-    ch.draw_righted_text(draw, text='Goal Differential:', font=basic_font, y_position=400, x_right=975, fill=text_color)
-    ch.draw_righted_text(draw, text='Division Rank:', font=basic_font, y_position=450, x_right=975, fill=text_color)
-    ch.draw_righted_text(draw, text='Conference Rank:', font=basic_font, y_position=500, x_right=975, fill=text_color)
-    ch.draw_righted_text(draw, text='League Rank:', font=basic_font, y_position=550, x_right=975, fill=text_color)
+    ch.draw_righted_text(draw, text='Record:', font=basic_font, y_position=row_ys[0], x_right=975, fill=text_color)
+    ch.draw_righted_text(draw, text='Points %:', font=basic_font, y_position=row_ys[1], x_right=975, fill=text_color)
+    ch.draw_righted_text(draw, text='Points:', font=basic_font, y_position=row_ys[2], x_right=975, fill=text_color)
+    ch.draw_righted_text(draw, text='Goal Differential:', font=basic_font, y_position=row_ys[3], x_right=975, fill=text_color)
+    ch.draw_righted_text(draw, text='Division Rank:', font=basic_font, y_position=row_ys[4], x_right=975, fill=text_color)
+    ch.draw_righted_text(draw, text='Conference Rank:', font=basic_font, y_position=row_ys[5], x_right=975, fill=text_color)
+    ch.draw_righted_text(draw, text='League Rank:', font=basic_font, y_position=row_ys[6], x_right=975, fill=text_color)
 
-    draw.text(xy=(1025, 250), text=record, font=basic_font, fill=text_color)
-    draw.text(xy=(1025, 300), text=point_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1025, 350), text=points, font=basic_font, fill=text_color)
-    draw.text(xy=(1025, 400), text=goal_diff_str, font=basic_font, fill=text_color)
-    draw.text(xy=(1025, 450), text=div_rank, font=basic_font, fill=text_color)
-    draw.text(xy=(1025, 500), text=conf_rank, font=basic_font, fill=text_color)
-    draw.text(xy=(1025, 550), text=league_rank, font=basic_font, fill=text_color)
+    draw.text(xy=(1025, row_ys[0]), text=record, font=basic_font, fill=text_color)
+    draw.text(xy=(1025, row_ys[1]), text=point_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1025, row_ys[2]), text=points, font=basic_font, fill=text_color)
+    draw.text(xy=(1025, row_ys[3]), text=goal_diff_str, font=basic_font, fill=text_color)
+    draw.text(xy=(1025, row_ys[4]), text=div_rank, font=basic_font, fill=text_color)
+    draw.text(xy=(1025, row_ys[5]), text=conf_rank, font=basic_font, fill=text_color)
+    draw.text(xy=(1025, row_ys[6]), text=league_rank, font=basic_font, fill=text_color)
 
     # Draw team stats text
-    ch.draw_centered_text(draw, text='5v5 STATS', font=subheading_font, y_position=190, x_center=1667, fill=text_color)
+    ch.draw_centered_text(draw, text='5v5 STATS', font=subheading_font, y_position=170, x_center=1667, fill=text_color)
 
-    ch.draw_righted_text(draw, text='Goals For %:', font=basic_font, y_position=250, x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='xGoals For %:', font=basic_font, y_position=300, x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Shots For %:', font=basic_font, y_position=350, x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Corsi For %:', font=basic_font, y_position=400, x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Fenwick For %:', font=basic_font, y_position=450, x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Shooting %:', font=basic_font, y_position=500, x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Save %:', font=basic_font, y_position=550, x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='Goals For %:', font=basic_font, y_position=row_ys[0], x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='xGoals For %:', font=basic_font, y_position=row_ys[1], x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='Shots For %:', font=basic_font, y_position=row_ys[2], x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='Corsi For %:', font=basic_font, y_position=row_ys[3], x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='Fenwick For %:', font=basic_font, y_position=row_ys[4], x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='Shooting %:', font=basic_font, y_position=row_ys[5], x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='Save %:', font=basic_font, y_position=row_ys[6], x_right=1642, fill=text_color)
 
-    draw.text(xy=(1692, 250), text=goals_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, 300), text=xgoals_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, 350), text=shots_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, 400), text=corsi_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, 450), text=fenwick_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, 500), text=shooting_percentage, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, 550), text=save_percentage, font=basic_font, fill=text_color)
+    draw.text(xy=(1692, row_ys[0]), text=goals_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1692, row_ys[1]), text=xgoals_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1692, row_ys[2]), text=shots_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1692, row_ys[3]), text=corsi_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1692, row_ys[4]), text=fenwick_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1692, row_ys[5]), text=shooting_percentage, font=basic_font, fill=text_color)
+    draw.text(xy=(1692, row_ys[6]), text=save_percentage, font=basic_font, fill=text_color)
 
     # Draw banner
     draw.polygon([(20, 20), (1980, 20), (1940, 140), (60, 140)], fill=primary_team_color)
@@ -165,10 +165,6 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     # Draw team name and season text
     draw.text(xy=(80, 24), text=team_name, font=heading_font, fill=header_text_color)
     ch.draw_righted_text(draw, season, heading_font, 24, 1924, fill=header_text_color)
-
-    # Draw divider rectangles
-    draw.rectangle([(664, 200), (669, 600)], fill=secondary_team_color)
-    draw.rectangle([(1331, 200), (1336, 600)], fill=secondary_team_color)
 
     # Draw bottom rectangle
     draw.rectangle([(60, 660), (1940, 700)], fill=primary_team_color)
@@ -223,7 +219,7 @@ def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str
     # Get percentile bar variables
     bar_x, bar_y = 210, 82
     bar_width, bar_height = 78, 150
-    border = 2
+    border = 3
 
     height = percentile * 1.5
 
@@ -247,7 +243,7 @@ def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str
     ch.draw_centered_text(draw, attribute_name, attribute_name_font, fill=attribute_color, y_position=-13, x_center=150)
     ch.draw_centered_text(draw, str(rank), rank_font, y_position=50, x_center=110, fill=text_color)
     ch.draw_centered_text(draw, f'/ {total_teams}', total_teams_font, y_position=200, x_center=110, fill=text_color)
-    ch.draw_centered_text(draw, str(percentile), percentile_font, y_position=155, x_center=249, fill=text_color)
+    ch.draw_centered_text(draw, str(percentile), percentile_font, y_position=155, x_center=253, fill=text_color, stroke_width=3, stroke_fill=background_color)
     
     # Draw rectangle
     draw.rectangle([(10, 64), (290, 70)], fill=attribute_color)
@@ -325,8 +321,8 @@ def make_elo_graph_section(team_row: pd.Series, mode: str = 'light') -> Image:
     y_padding = (1700 - 1300) * 0.10
     ax.set_ylim(1300 - y_padding, 1700 + y_padding)
     ax.set_yticks(y_ticks)
-    ax.set_yticklabels(y_ticks, fontsize=12, fontweight='bold', color=constants.GRAPH_GRAY)
-    ax.tick_params(axis="y", labelsize=12, colors=constants.GRAPH_GRAY, length=0, pad=1)
+    ax.set_yticklabels(y_ticks, fontsize=15, fontweight='bold', color=constants.GRAPH_GRAY)
+    ax.tick_params(axis="y", labelsize=15, colors=constants.GRAPH_GRAY, length=0, pad=1)
 
     # Grid
     ax.grid(axis="y", linestyle="-", linewidth=2, color=constants.GRAPH_GRAY)
@@ -423,8 +419,8 @@ def make_srs_graph_section(team_row: pd.Series, mode: str = 'light') -> Image:
     y_padding = (max_rank - 1) * 0.10
     ax.set_ylim(1 - y_padding, max_rank + y_padding)
     ax.set_yticks(yticks)
-    ax.set_yticklabels(yticks, fontsize=12, fontweight='bold', color=constants.GRAPH_GRAY)
-    ax.tick_params(axis="y", labelsize=12, labelcolor=constants.GRAPH_GRAY, length=0, pad=1)
+    ax.set_yticklabels(yticks, fontsize=15, fontweight='bold', color=constants.GRAPH_GRAY)
+    ax.tick_params(axis="y", labelsize=15, labelcolor=constants.GRAPH_GRAY, length=0, pad=1)
     ax.invert_yaxis()
 
     # Grid & styling
@@ -499,7 +495,7 @@ def make_branding_section(team_abbrev: str, mode: str = 'light') -> Image:
     ch.draw_righted_text(draw, 'analyticswavery', basic_font, 156, 940, fill=text_color)
 
     # Resources text
-    draw.text(xy=(1060, 73), text='Team Data From:', font=basic_font, fill=text_color)
+    draw.text(xy=(1060, 73), text='Data From:', font=basic_font, fill=text_color)
     draw.text(xy=(1060, 156), text='Date Updated:', font=basic_font, fill=text_color)
 
     ch.draw_righted_text(draw, 'naturalstattrick.com', basic_font, 73, 1900, fill=text_color)

@@ -21,8 +21,10 @@ def draw_centered_text(
         font: ImageFont.ImageFont,
         y_position: int,
         x_center: int = 1000,
-        fill: tuple[int, int, int] = (0, 0, 0)
-    ) -> None:    
+        fill: tuple[int, int, int] = (0, 0, 0),
+        stroke_width: int = 0,
+        stroke_fill: tuple[int, int, int] = None,
+    ) -> None:
     """
     Draws text that is centered on a PIL drawing.
 
@@ -32,13 +34,15 @@ def draw_centered_text(
     :param y_position: An int of where the y position will be
     :param x_center: An int of where the center x position is (default is at 1000)
     :param fill: A tuple of rgb values for the color of the text (default is (0,0,0)/black)
+    :param stroke_width: An int outline thickness in pixels around the text (default is 0/no outline)
+    :param stroke_fill: A tuple of rgb values for the outline color (default is None)
     :return: None
     """
 
-    text_bbox = draw.textbbox((0, 0), text, font=font)
+    text_bbox = draw.textbbox((0, 0), text, font=font, stroke_width=stroke_width)
     text_width = text_bbox[2] - text_bbox[0]
-    x_position = x_center - (text_width // 2)  
-    draw.text((x_position, y_position), text, font=font, fill=fill)
+    x_position = x_center - (text_width // 2)
+    draw.text((x_position, y_position), text, font=font, fill=fill, stroke_width=stroke_width, stroke_fill=stroke_fill)
 
 
 def draw_righted_text(
