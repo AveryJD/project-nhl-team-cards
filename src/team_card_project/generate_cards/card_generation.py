@@ -109,7 +109,7 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     w_percent = logo_width / team_logo.width
     logo_height = int(team_logo.height * w_percent)
     team_logo = team_logo.resize((logo_width, logo_height), Image.Resampling.LANCZOS)
-    header_section.paste(team_logo, (-42, 140), team_logo)
+    header_section.paste(team_logo, (-42, 135), team_logo)
 
     # Load fonts
     basic_font = FONT_CACHE['basic_60']
