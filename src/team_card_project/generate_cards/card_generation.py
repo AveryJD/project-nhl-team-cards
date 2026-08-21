@@ -105,11 +105,11 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     team_logo = Image.open(io.BytesIO(cairosvg.svg2png(bytestring=svg_bytes))).convert("RGBA")
 
     # Calculate proportional height, resize and paste
-    logo_width = 750
+    logo_width = 808
     w_percent = logo_width / team_logo.width
     logo_height = int(team_logo.height * w_percent)
     team_logo = team_logo.resize((logo_width, logo_height), Image.Resampling.LANCZOS)
-    header_section.paste(team_logo, (-25, 150), team_logo)
+    header_section.paste(team_logo, (-42, 140), team_logo)
 
     # Load fonts
     basic_font = FONT_CACHE['basic_60']
@@ -139,23 +139,23 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     draw.text(xy=(1025, row_ys[6]), text=league_rank, font=basic_font, fill=text_color)
 
     # Draw team stats text
-    ch.draw_centered_text(draw, text='5v5 STATS', font=subheading_font, y_position=170, x_center=1667, fill=text_color)
+    ch.draw_centered_text(draw, text='5v5 STATS', font=subheading_font, y_position=170, x_center=1657, fill=text_color)
 
-    ch.draw_righted_text(draw, text='Goals For %:', font=basic_font, y_position=row_ys[0], x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='xGoals For %:', font=basic_font, y_position=row_ys[1], x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Shots For %:', font=basic_font, y_position=row_ys[2], x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Corsi For %:', font=basic_font, y_position=row_ys[3], x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Fenwick For %:', font=basic_font, y_position=row_ys[4], x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Shooting %:', font=basic_font, y_position=row_ys[5], x_right=1642, fill=text_color)
-    ch.draw_righted_text(draw, text='Save %:', font=basic_font, y_position=row_ys[6], x_right=1642, fill=text_color)
+    ch.draw_righted_text(draw, text='Goals For %:', font=basic_font, y_position=row_ys[0], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='xGoals For %:', font=basic_font, y_position=row_ys[1], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='Shots For %:', font=basic_font, y_position=row_ys[2], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='Corsi For %:', font=basic_font, y_position=row_ys[3], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='Fenwick For %:', font=basic_font, y_position=row_ys[4], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='Shooting %:', font=basic_font, y_position=row_ys[5], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='Save %:', font=basic_font, y_position=row_ys[6], x_right=1632, fill=text_color)
 
-    draw.text(xy=(1692, row_ys[0]), text=goals_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, row_ys[1]), text=xgoals_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, row_ys[2]), text=shots_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, row_ys[3]), text=corsi_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, row_ys[4]), text=fenwick_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, row_ys[5]), text=shooting_percentage, font=basic_font, fill=text_color)
-    draw.text(xy=(1692, row_ys[6]), text=save_percentage, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[0]), text=goals_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[1]), text=xgoals_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[2]), text=shots_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[3]), text=corsi_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[4]), text=fenwick_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[5]), text=shooting_percentage, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[6]), text=save_percentage, font=basic_font, fill=text_color)
 
     # Draw banner
     draw.polygon([(20, 20), (1980, 20), (1940, 140), (60, 140)], fill=primary_team_color)
