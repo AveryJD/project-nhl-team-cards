@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw, ImageFont
 import io
 import os
-from team_card_project.utils import constants
-from team_card_project.utils import load_save
+from team_card_project import constants
+from team_card_project import data_io
 
 
 DATA_DIR = constants.DATA_DIR
@@ -65,8 +65,8 @@ def draw_righted_text(
     :return: None
     """
 
-    text_width = draw.textbbox((0, 0), str(text), font=font)[2] 
-    x_position = x_right - text_width 
+    text_width = draw.textbbox((0, 0), str(text), font=font)[2]
+    x_position = x_right - text_width
     draw.text((x_position, y_position), str(text), font=font, fill=fill)
 
 
@@ -149,6 +149,6 @@ def get_team_seasons_srs(team, cur_season, seasons_num: int = 5):
 
         seasons_srs.append(team_srs)
 
-        cur_season = load_save.get_prev_season(cur_season)
+        cur_season = data_io.get_prev_season(cur_season)
 
     return seasons_srs

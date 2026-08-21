@@ -9,8 +9,8 @@ import requests
 import time
 import random
 import re
-from team_card_project.utils import constants
-from team_card_project.utils import load_save
+from team_card_project import constants
+from team_card_project import data_io
 
 
 DATA_DIR = constants.DATA_DIR
@@ -58,7 +58,7 @@ def get_page(url: str) -> bytes:
         response = session.get(url, headers=headers, timeout=30)
         response.raise_for_status()
         return response.content
-    
+
 
 def fix_team_names(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     """
@@ -71,7 +71,7 @@ def fix_team_names(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     # Fix team names
     for col in columns:
         df[col] = df[col].replace(constants.TEAM_NAME_FIXES)
-    
+
     return df
 
 
@@ -84,7 +84,7 @@ def scrape_data(url: str) -> pd.DataFrame:
     """
     # Fetch the page from the URL
     page_content = get_page(url)
-    
+
     # Scrape page
     soup = BeautifulSoup(page_content, 'html.parser')
     columns = [item.text for item in soup.find_all('th')]
@@ -93,7 +93,7 @@ def scrape_data(url: str) -> pd.DataFrame:
     # Make DataFrame
     table = [data[i:i+len(columns)] for i in range(0, len(data), len(columns))]
     df = pd.DataFrame(table, columns=columns)
-    
+
     return df
 
 
@@ -121,7 +121,7 @@ def scrape_team_data(season: str, situation: str) -> None:
 
     # Save as a CSV
     file_name = f'{season}_{situation}_team_data.csv'
-    load_save.save_csv(df, season, 'scraped_data', file_name)
+    data_io.save_csv(df, season, 'scraped_data', file_name)
 
     return None
 
@@ -151,7 +151,7 @@ def scrape_standings_data(season: str) -> None:
 
     # Save as a CSV
     file_name = f'{season}_standings.csv'
-    load_save.save_csv(df, season, 'scraped_data', file_name)
+    data_io.save_csv(df, season, 'scraped_data', file_name)
 
     return None
 
@@ -236,6 +236,6 @@ def scrape_games_data(season: str) -> None:
 
     # Save as a CSV
     file_name = f'{season}_games.csv'
-    load_save.save_csv(df, season, 'scraped_data', file_name)
+    data_io.save_csv(df, season, 'scraped_data', file_name)
 
     return None

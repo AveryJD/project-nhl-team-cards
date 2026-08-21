@@ -39,7 +39,7 @@ DATA_DIR = os.path.join(PROJECT_DIR, 'data')
 
 
 # ====================================================================================================
-# CARD DATA CONSTANTS
+# DATA COLLECTION CONSTANTS
 # ====================================================================================================
 
 # Date card data was updated on
@@ -48,31 +48,21 @@ UPDATE_DATE = 'July 1, 2026'
 # Situations to scrape team data for
 SITUATIONS = ['all', '5v5', '4v5', '5v4']
 
-# Seasons to scrape data for
-DATA_SEASONS = ['2025-2026']
-
-# Seasons to gather card data for
-CARD_SEASONS = [
-    '2007-2008', '2008-2009', '2009-2010', '2010-2011', '2011-2012', 
-    '2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017', 
-    '2017-2018', '2018-2019', '2019-2020', '2020-2021', '2021-2022', 
-    '2022-2023', '2023-2024', '2024-2025', '2025-2026'
-]
-
-# All seasons of avalible data
-ALL_SEASONS = [
-    '2007-2008', '2008-2009', '2009-2010', '2010-2011', '2011-2012', 
-    '2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017', 
-    '2017-2018', '2018-2019', '2019-2020', '2020-2021', '2021-2022', 
+# Seasons to scrape, process, and generate cards for
+DATA_SEASONS = [
+    '2007-2008', '2008-2009', '2009-2010', '2010-2011', '2011-2012',
+    '2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017',
+    '2017-2018', '2018-2019', '2019-2020', '2020-2021', '2021-2022',
     '2022-2023', '2023-2024', '2024-2025', '2025-2026'
 ]
 
 
 
 # ====================================================================================================
-# ELO CONSTANTS
+# DATA PROCESSING CONSTANTS
 # ====================================================================================================
 
+# === ELO ===
 INITIAL_ELO = 1500
 ELO_K = 20
 ELO_S = 400
@@ -90,9 +80,10 @@ ELO_RESULTS = {
 
 
 # ====================================================================================================
-# CARD DESIGN CONSTANTS
+# CARD GENERATION CONSTANTS
 # ====================================================================================================
 
+# === NAMING ===
 # Attribute names with full names (CHANGE FOR TEAMS)
 ATTRIBUTE_NAMES = {
     'gf_rank' : 'Goals For',
@@ -105,8 +96,20 @@ ATTRIBUTE_NAMES = {
     'sa_rank' : 'Shots Against',
     'fn_rank' : 'Finishing',
     'gt_rank' : 'Goaltending',
+    'gf_pct_rank' : 'Goals For %',
+    'xgf_pct_rank' : 'xGoals For %',
+    'sf_pct_rank' : 'Shots For %',
+    'cf_pct_rank' : 'Corsi For %',
+    'ff_pct_rank' : 'Fenwick For %',
+    'sh_pct_rank' : 'Shooting %',
+    'sv_pct_rank' : 'Save %',
 }
 
+# === FONTS ===
+BASIC_FONT_PATH = f'{DATA_DIR}/assets/fonts/basic.ttf'
+HEADING_FONT_PATH = f'{DATA_DIR}/assets/fonts/header.ttf'
+
+# === COLORS ===
 # Card color RGB values
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -243,8 +246,8 @@ SEASON_TEAM_NUM = {
     '2023-2024': 32,
     '2022-2023': 32,
     '2021-2022': 32,    # Seattle Kraken Added
-    '2020-2021': 31,  
-    '2019-2020': 31,  
+    '2020-2021': 31,
+    '2019-2020': 31,
     '2018-2019': 31,
     '2017-2018': 31,    # Vegas Golden Knights Added
     '2016-2017': 30,

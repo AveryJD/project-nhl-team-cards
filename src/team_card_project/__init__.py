@@ -1,1 +1,1 @@
-from team_card_project.utils.card_functions import make_team_card
+from team_card_project.generate_cards.card_generation import make_team_card

@@ -6,8 +6,8 @@
 import pandas as pd
 import numpy as np
 from scipy.optimize import minimize
-from team_card_project.utils import constants
-from team_card_project.utils import load_save
+from team_card_project import constants
+from team_card_project import data_io
 
 
 DATA_DIR = constants.DATA_DIR
@@ -26,7 +26,7 @@ def sum_of_squared_residuals(params, games):
     # Get ratings and home advantage
     home_adv = params[0]
     ratings = params[1:]
-    
+
     # Calculate the SSR
     ssr = 0
     for game in games:
@@ -96,7 +96,7 @@ def calculate_season_srs(season: str) -> None:
     """
 
     # Load game  results
-    games_df = load_save.load_games(season)
+    games_df = data_io.load_games(season)
 
     # Calculate Simple Rating System ratings
     srs_df = calculate_srs(games_df)
@@ -110,6 +110,6 @@ def calculate_season_srs(season: str) -> None:
 
     # Save SRS results
     file_name = f"{season}_srs.csv"
-    load_save.save_csv(srs_df, season, 'ratings', file_name)
+    data_io.save_csv(srs_df, season, 'ratings', file_name)
 
     return None

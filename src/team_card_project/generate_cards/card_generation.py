@@ -13,16 +13,16 @@ import ast
 import cairosvg
 import inflect
 from PIL import Image, ImageDraw, ImageFont
-from team_card_project.utils import card_helpers as ch
-from team_card_project.utils import constants
-from team_card_project.utils import load_save
+from team_card_project.generate_cards import card_utils as ch
+from team_card_project import constants
+from team_card_project import data_io
 
 
 DATA_DIR = constants.DATA_DIR
 
 # Load and cache fonts
-BASIC_FONT_PATH = f'{DATA_DIR}/assets/fonts/basic.ttf'
-HEADING_FONT_PATH = f'{DATA_DIR}/assets/fonts/header.ttf'
+BASIC_FONT_PATH = constants.BASIC_FONT_PATH
+HEADING_FONT_PATH = constants.HEADING_FONT_PATH
 
 FONT_CACHE = {
     'basic_40': ImageFont.truetype(BASIC_FONT_PATH, 40),
@@ -36,7 +36,7 @@ FONT_CACHE = {
 
 def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     """
-    Creates the header section of a team card as a PIL Image. The header includes team standings, season, 
+    Creates the header section of a team card as a PIL Image. The header includes team standings, season,
     team logo, and key stats.
 
     :param team_row: A Series containing team data
@@ -60,7 +60,7 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     header_text_color = constants.WHITE
     header_shadow_color = constants.SECONDARY_COLORS.get(team_abbrev)
 
-    
+
     # Get standings variables
     wins = team_row['Wins']
     losses = team_row['Losses']
@@ -71,7 +71,7 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     goal_diff = team_row['Goal Differential']
     if goal_diff > 0:
         goal_diff_str = f'+{goal_diff}'
-    else: 
+    else:
         goal_diff_str = str(goal_diff)
 
     inflect_engine = inflect.engine()
@@ -98,7 +98,7 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
 
     # Create draw object
     draw = ImageDraw.Draw(header_section)
-    
+
     # Get team logo
     with open(f'{DATA_DIR}/assets/team_logos/{team_abbrev}_{mode}.svg', 'rb') as f:
         svg_bytes = f.read()
@@ -174,7 +174,7 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
 
 def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str = 'light') -> Image:
     """
-    Creates a ranking component for a specific team attribute, displaying the team's rank, total teams, 
+    Creates a ranking component for a specific team attribute, displaying the team's rank, total teams,
     percentile, and a visual percentile bar.
 
     :param team_row: A Series containing team data
@@ -203,9 +203,9 @@ def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str
     ranking_section_height = 240
     ranking_section = Image.new("RGB", (ranking_section_width, ranking_section_height), color=background_color)
 
-    # Create draw object 
+    # Create draw object
     draw = ImageDraw.Draw(ranking_section)
-    
+
     # Get total teams
     total_teams = constants.SEASON_TEAM_NUM.get(season)
 
@@ -215,7 +215,7 @@ def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str
 
     # Get percentile color
     percentile_color = ch.get_percentile_color(percentile)
-    
+
     # Get percentile bar variables
     bar_x, bar_y = 210, 82
     bar_width, bar_height = 78, 150
@@ -229,7 +229,7 @@ def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str
     percent_top = percent_bottom - height
 
     # Draw the percentile bar
-    draw.rectangle([bar_x - border, bar_y - border, bar_x + bar_width + border, bar_y + bar_height + border], 
+    draw.rectangle([bar_x - border, bar_y - border, bar_x + bar_width + border, bar_y + bar_height + border],
                    fill=constants.GRAY, outline=text_color, width=border)
     draw.rectangle([percent_left, percent_top, percent_right, percent_bottom], fill=percentile_color)
 
@@ -244,10 +244,10 @@ def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str
     ch.draw_centered_text(draw, str(rank), rank_font, y_position=50, x_center=110, fill=text_color)
     ch.draw_centered_text(draw, f'/ {total_teams}', total_teams_font, y_position=200, x_center=110, fill=text_color)
     ch.draw_centered_text(draw, str(percentile), percentile_font, y_position=155, x_center=253, fill=text_color, stroke_width=3, stroke_fill=background_color)
-    
+
     # Draw rectangle
     draw.rectangle([(10, 64), (290, 70)], fill=attribute_color)
-    
+
     return ranking_section
 
 
@@ -368,7 +368,7 @@ def make_srs_graph_section(team_row: pd.Series, mode: str = 'light') -> Image:
     cur_season = team_row["Season"]
     seasons = [cur_season]
     for _ in range(len(srs_history) - 1):
-        seasons.append(load_save.get_prev_season(seasons[-1]))
+        seasons.append(data_io.get_prev_season(seasons[-1]))
     seasons.reverse()
 
     # Colors
@@ -486,7 +486,7 @@ def make_branding_section(team_abbrev: str, mode: str = 'light') -> Image:
 
     # Get the font
     basic_font = FONT_CACHE['basic_73']
-    
+
     # Branding text
     draw.text(xy=(100, 73), text='Website:', font=basic_font, fill=text_color)
     draw.text(xy=(100, 156), text='Socials:', font=basic_font, fill=text_color)
@@ -500,7 +500,7 @@ def make_branding_section(team_abbrev: str, mode: str = 'light') -> Image:
 
     ch.draw_righted_text(draw, 'naturalstattrick.com', basic_font, 73, 1900, fill=text_color)
     ch.draw_righted_text(draw, update_date, basic_font, 156, 1900, fill=text_color)  #'PuckPedia.com'
-    
+
     # Get font
     heading_font = FONT_CACHE['heading_116']
 
@@ -528,7 +528,7 @@ def make_team_card(team: str, season: str, mode: str ='light', save: bool=True,)
     """
 
     # Get the team's card data for the given season
-    team_season_data = load_save.load_card_data(season)
+    team_season_data = data_io.load_card_data(season)
     team_row = team_season_data[team_season_data["Team"] == team].iloc[0]
 
     team_abbrev = team_row['Team Abbreviation']
@@ -606,7 +606,7 @@ def make_team_card(team: str, season: str, mode: str ='light', save: bool=True,)
     team_card = team_card.convert('RGB')
     file_name = f"{season}_{team_abbrev}_{mode}.png"
     if save:
-        load_save.save_card(team_card, season, file_name)
+        data_io.save_card(team_card, season, file_name)
 
     print(f'========== {team} card ({mode}) created for the {season} season! ==========')
 

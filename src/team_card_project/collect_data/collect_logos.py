@@ -5,7 +5,7 @@
 # Imports
 import requests
 import os
-from team_card_project.utils import constants
+from team_card_project import constants
 
 
 def scrape_logos() -> None:
@@ -16,16 +16,16 @@ def scrape_logos() -> None:
     :return: None
     """
     os.makedirs('data/assets/team_logos', exist_ok=True)
-    
+
     for team_code in constants.TEAM_NAMES:
         for variant in ['light', 'dark']:
             # Make the full URL for the SVG file
             file_name = f"{team_code}_{variant}.svg"
             url = f'https://assets.nhle.com/logos/nhl/svg/{file_name}'
-            
+
             # Make a GET request to the URL
             response = requests.get(url, stream=True)
-            
+
             if response.status_code == 200:
                 # Write the SVG content to a file
                 output_path = os.path.join('data', 'assets', 'team_logos', file_name)

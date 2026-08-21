@@ -6,7 +6,7 @@
 import pandas as pd
 from PIL import Image
 import os
-from team_card_project.utils import constants
+from team_card_project import constants
 
 PROJECT_DIR = constants.PROJECT_DIR
 DATA_DIR = constants.DATA_DIR
@@ -50,7 +50,7 @@ def load_games(season: str) -> pd.DataFrame:
     file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'scraped_data', file_name)
     df = pd.read_csv(file_path)
     return df
-    
+
 
 def load_srs(season: str) -> pd.DataFrame:
     """
@@ -63,7 +63,7 @@ def load_srs(season: str) -> pd.DataFrame:
     file_path = os.path.join(DATA_DIR, 'team_card_data', season, 'ratings', file_name)
     df = pd.read_csv(file_path)
     return df
-    
+
 
 def load_elo(season: str, team: str) -> pd.DataFrame:
     """
@@ -133,7 +133,7 @@ def save_card(card: Image, season: str, file_name: str) -> None:
 
     :param card: The card image to save
     :param season: The season folder to save to
-    :param team: The team folder inside the year folder to save to 
+    :param team: The team folder inside the year folder to save to
     :param file_name: Name of the card to save
     :return: None
     """

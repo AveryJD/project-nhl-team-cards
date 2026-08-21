@@ -4,8 +4,8 @@
 
 # Imports
 import pandas as pd
-from team_card_project.utils import constants
-from team_card_project.utils import load_save
+from team_card_project import constants
+from team_card_project import data_io
 
 
 def make_league_rankings(all_df: pd.DataFrame, season: str) -> pd.DataFrame:
@@ -31,7 +31,7 @@ def make_league_rankings(all_df: pd.DataFrame, season: str) -> pd.DataFrame:
         by=[
             "Points",                   # Total points
             "Point %",                  # Fewer GP
-            "Regulation Wins",          # Regulation wins 
+            "Regulation Wins",          # Regulation wins
             "Regulation/Overtime Wins", # Regulation and overtime wins
             "Wins",                     # Total wins
             "Goal Differential",        # Goal differential
@@ -87,6 +87,13 @@ def make_attribute_rankings(df: pd.DataFrame) -> pd.DataFrame:
         "sa_rank": ("SA", True),
         "fn_rank": ("GAx", False),
         "gt_rank": ("GSAx", False),
+        "gf_pct_rank": ("EV_GF%", False),
+        "xgf_pct_rank": ("EV_xGF%", False),
+        "sf_pct_rank": ("EV_SF%", False),
+        "cf_pct_rank": ("EV_CF%", False),
+        "ff_pct_rank": ("EV_FF%", False),
+        "sh_pct_rank": ("EV_SH%", False),
+        "sv_pct_rank": ("EV_SV%", False),
     }
 
     # stats that should be converted to per-game rates
@@ -116,18 +123,18 @@ def make_attribute_rankings(df: pd.DataFrame) -> pd.DataFrame:
 def make_card_data(season: str) -> None:
     """
     Generate a CSV file of all the relevant team card data from other CSV files
-    
+
     :param season: A str of the season to make the card data for ('YYYY-YYYY')
     :return: None
     """
 
     # Load team data
-    all_df = load_save.load_team_data(season, 'all')
-    ev_df = load_save.load_team_data(season, '5v5')
-    pp_df = load_save.load_team_data(season, '5v4')
-    pk_df = load_save.load_team_data(season, '4v5')
+    all_df = data_io.load_team_data(season, 'all')
+    ev_df = data_io.load_team_data(season, '5v5')
+    pp_df = data_io.load_team_data(season, '5v4')
+    pk_df = data_io.load_team_data(season, '4v5')
 
-    standings_df = load_save.load_standings(season)
+    standings_df = data_io.load_standings(season)
 
     # Initialize dictionary with empty lists for all teams
     srs_rows = {team_name: [] for team_name in constants.TEAM_NAMES.values()}
@@ -136,7 +143,7 @@ def make_card_data(season: str) -> None:
     cur_season = season
     for _ in range(5):
         try:
-            all_srs_df = load_save.load_srs(cur_season)
+            all_srs_df = data_io.load_srs(cur_season)
             for team_full_name in constants.TEAM_NAMES.values():
                 if team_full_name == "Arizona Coyotes" and cur_season <= "2013-2014":
                     row = all_srs_df[all_srs_df["Team"] == "Phoenix Coyotes"]
@@ -150,12 +157,12 @@ def make_card_data(season: str) -> None:
         except FileNotFoundError:
             for team_full_name in constants.TEAM_NAMES.values():
                 srs_rows[team_full_name].insert(0, None)
-        cur_season = load_save.get_prev_season(cur_season)
+        cur_season = data_io.get_prev_season(cur_season)
 
     # Convert to DataFrame
     srs_df = pd.DataFrame([
         {
-        "Team": team_name, 
+        "Team": team_name,
         "SRS Rank History": [float(r) if r is not None else None for r in ratings]
         }
         for team_name, ratings in srs_rows.items()
@@ -166,7 +173,7 @@ def make_card_data(season: str) -> None:
 
     for team in constants.TEAM_NAMES:
         try:
-            elo_df = load_save.load_elo(season, team)
+            elo_df = data_io.load_elo(season, team)
 
             elo_rows.append({
                 "Team": constants.TEAM_NAMES.get(team),
@@ -270,4 +277,4 @@ def make_card_data(season: str) -> None:
 
     # Save
     file_name = f"{season}_team_card_data.csv"
-    load_save.save_card_data(card_info_df, file_name)
+    data_io.save_card_data(card_info_df, file_name)

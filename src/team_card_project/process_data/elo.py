@@ -5,8 +5,8 @@
 # Imports
 import pandas as pd
 import numpy as np
-from team_card_project.utils import constants
-from team_card_project.utils import load_save
+from team_card_project import constants
+from team_card_project import data_io
 
 
 DATA_DIR = constants.DATA_DIR
@@ -55,7 +55,7 @@ def get_margin_multiplier(goals_a, goals_b, rating_a, rating_b):
     else:
         rating_w = rating_b
         rating_l = rating_a
-    
+
     # Calculate margin multiplier
     numerator = (0.6686 * np.log(margin) + 0.8048) * 2.05
     denominator = (rating_w - rating_l) * 0.001 + 2.05
@@ -73,7 +73,7 @@ def calculate_season_elo(season):
     """
 
     # Load games data
-    games_df = load_save.load_games(season)
+    games_df = data_io.load_games(season)
 
     # Get all teams that played in the given season
     teams_in_season = games_df['Home Team'].unique()
@@ -153,6 +153,6 @@ def calculate_season_elo(season):
         team_abbreviation = inverted_team_dict.get(team)
         team_df = pd.DataFrame(history, columns=["Game", "Elo"])
         file_name = f'{season}_{team_abbreviation}_elo.csv'
-        load_save.save_csv(team_df, season, 'ratings', file_name)
+        data_io.save_csv(team_df, season, 'ratings', file_name)
 
     return None
