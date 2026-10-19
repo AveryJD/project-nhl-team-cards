@@ -3,6 +3,7 @@
 # ====================================================================================================
 
 # Imports
+import os
 import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
@@ -13,7 +14,7 @@ import ast
 import cairosvg
 import inflect
 from PIL import Image, ImageDraw, ImageFont
-from team_card_project.generate_cards import card_utils as ch
+from team_card_project import card_utils as ch
 from team_card_project import constants
 from team_card_project import data_io
 
@@ -66,7 +67,7 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     losses = team_row['Losses']
     otl = team_row['Overtime/Shootout Losses']
     record = f'{wins}-{losses}-{otl}'
-    point_percent = str(format(team_row['Point %'], '.3f'))
+    point_percent = f"{float(team_row['Point %']):.3f}"
     points = str(team_row['Points'])
     goal_diff = team_row['Goal Differential']
     if goal_diff > 0:
@@ -82,14 +83,16 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
         conf_rank = 'N/A'
     league_rank = inflect_engine.ordinal(int(team_row['League Rank']))
 
-    # Get stats variables, each with its league-wide rank
-    goals_for_percent = f"{format(team_row['EV_GF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['gf_pct_rank']))})"
-    xgoals_for_percent = f"{format(team_row['EV_xGF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['xgf_pct_rank']))})"
-    shots_for_percent = f"{format(team_row['EV_SF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['sf_pct_rank']))})"
-    corsi_for_percent = f"{format(team_row['EV_CF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['cf_pct_rank']))})"
-    fenwick_for_percent = f"{format(team_row['EV_FF%'], '.3f')} ({inflect_engine.ordinal(int(team_row['ff_pct_rank']))})"
-    shooting_percentage = f"{format(team_row['EV_SH%'], '.3f')} ({inflect_engine.ordinal(int(team_row['sh_pct_rank']))})"
-    save_percentage = f"{format(team_row['EV_SV%'], '.3f')} ({inflect_engine.ordinal(int(team_row['sv_pct_rank']))})"
+    # Get stats variables, each with its league-wide rank. GFAx/GAAx (Goals/Goals Against Above Expected at
+    # 5v5) now come pre-computed from the card data itself (stats-collection's team_card_data.py) in place of
+    # the old Shots For %/Fenwick For % lines.
+    goals_for_above_expected = f"{float(team_row['EV_GFAx']):.3f} ({inflect_engine.ordinal(int(team_row['gfax_pct_rank']))})"
+    goals_against_above_expected = f"{float(team_row['EV_GAAx']):.3f} ({inflect_engine.ordinal(int(team_row['gaax_pct_rank']))})"
+    goals_for_percent = f"{float(team_row['EV_GF%']):.3f} ({inflect_engine.ordinal(int(team_row['gf_pct_rank']))})"
+    xgoals_for_percent = f"{float(team_row['EV_xGF%']):.3f} ({inflect_engine.ordinal(int(team_row['xgf_pct_rank']))})"
+    corsi_for_percent = f"{float(team_row['EV_CF%']):.3f} ({inflect_engine.ordinal(int(team_row['cf_pct_rank']))})"
+    shooting_percentage = f"{float(team_row['EV_SH%']):.3f} ({inflect_engine.ordinal(int(team_row['sh_pct_rank']))})"
+    save_percentage = f"{float(team_row['EV_SV%']):.3f} ({inflect_engine.ordinal(int(team_row['sv_pct_rank']))})"
 
     # Create header section card
     header_section_width = 2000
@@ -100,7 +103,7 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     draw = ImageDraw.Draw(header_section)
 
     # Get team logo
-    with open(f'{DATA_DIR}/assets/team_logos/{team_abbrev}_{mode}.svg', 'rb') as f:
+    with open(os.path.join(constants.ASSETS_DIR, 'team_logos', f'{team_abbrev}_{mode}.svg'), 'rb') as f:
         svg_bytes = f.read()
     team_logo = Image.open(io.BytesIO(cairosvg.svg2png(bytestring=svg_bytes))).convert("RGBA")
 
@@ -141,19 +144,19 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     # Draw team stats text
     ch.draw_centered_text(draw, text='5v5 STATS', font=subheading_font, y_position=170, x_center=1657, fill=text_color)
 
-    ch.draw_righted_text(draw, text='Goals For %:', font=basic_font, y_position=row_ys[0], x_right=1632, fill=text_color)
-    ch.draw_righted_text(draw, text='xGoals For %:', font=basic_font, y_position=row_ys[1], x_right=1632, fill=text_color)
-    ch.draw_righted_text(draw, text='Shots For %:', font=basic_font, y_position=row_ys[2], x_right=1632, fill=text_color)
-    ch.draw_righted_text(draw, text='Corsi For %:', font=basic_font, y_position=row_ys[3], x_right=1632, fill=text_color)
-    ch.draw_righted_text(draw, text='Fenwick For %:', font=basic_font, y_position=row_ys[4], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='GFAx:', font=basic_font, y_position=row_ys[0], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='GAAx:', font=basic_font, y_position=row_ys[1], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='Goals For %:', font=basic_font, y_position=row_ys[2], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='xGoals For %:', font=basic_font, y_position=row_ys[3], x_right=1632, fill=text_color)
+    ch.draw_righted_text(draw, text='Corsi For %:', font=basic_font, y_position=row_ys[4], x_right=1632, fill=text_color)
     ch.draw_righted_text(draw, text='Shooting %:', font=basic_font, y_position=row_ys[5], x_right=1632, fill=text_color)
     ch.draw_righted_text(draw, text='Save %:', font=basic_font, y_position=row_ys[6], x_right=1632, fill=text_color)
 
-    draw.text(xy=(1682, row_ys[0]), text=goals_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1682, row_ys[1]), text=xgoals_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1682, row_ys[2]), text=shots_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1682, row_ys[3]), text=corsi_for_percent, font=basic_font, fill=text_color)
-    draw.text(xy=(1682, row_ys[4]), text=fenwick_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[0]), text=goals_for_above_expected, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[1]), text=goals_against_above_expected, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[2]), text=goals_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[3]), text=xgoals_for_percent, font=basic_font, fill=text_color)
+    draw.text(xy=(1682, row_ys[4]), text=corsi_for_percent, font=basic_font, fill=text_color)
     draw.text(xy=(1682, row_ys[5]), text=shooting_percentage, font=basic_font, fill=text_color)
     draw.text(xy=(1682, row_ys[6]), text=save_percentage, font=basic_font, fill=text_color)
 
@@ -209,9 +212,13 @@ def make_rank_component(team_row: pd.Series, attribute_rank_name: str, mode: str
     # Get total teams
     total_teams = constants.SEASON_TEAM_NUM.get(season)
 
-    # Get rank and percentile
+    # Get rank and percentile -- percentile now comes pre-computed (as a whole number) from team_card_data.py,
+    # saved there under a '{Full Name} Percentile' column (e.g. 'Goals For Percentile'), the same naming
+    # convention player card data's own percentile columns use and matching the same attribute_name this
+    # function already looks up above
     rank = int(team_row[attribute_rank_name])
-    percentile = int(round((total_teams - rank) / (total_teams - 1), 2) * 100)
+    pct_col = f'{attribute_name} Percentile'
+    percentile = int(team_row[pct_col])
 
     # Get percentile color
     percentile_color = ch.get_percentile_color(percentile)
@@ -498,7 +505,7 @@ def make_branding_section(team_abbrev: str, mode: str = 'light') -> Image:
     draw.text(xy=(1060, 73), text='Data From:', font=basic_font, fill=text_color)
     draw.text(xy=(1060, 156), text='Date Updated:', font=basic_font, fill=text_color)
 
-    ch.draw_righted_text(draw, 'naturalstattrick.com', basic_font, 73, 1900, fill=text_color)
+    ch.draw_righted_text(draw, 'NHL', basic_font, 73, 1900, fill=text_color)
     ch.draw_righted_text(draw, update_date, basic_font, 156, 1900, fill=text_color)  #'PuckPedia.com'
 
     # Get font

@@ -123,7 +123,8 @@ def get_percentile_color(percentile: int) -> tuple[int, int, int]:
         g = 238 - int((238 - 128) * ratio)
         b = 144 - int(144 * ratio)
 
-    return (r, g, b)
+    color = (r, g, b)
+    return color
 
 
 def get_team_seasons_srs(team, cur_season, seasons_num: int = 5):
