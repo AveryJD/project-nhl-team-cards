@@ -1,5 +1,5 @@
 # ====================================================================================================
-# CONSTANTS
+# GET PROJECT FILE LOCATION
 # ====================================================================================================
 
 # Imports
@@ -13,75 +13,44 @@ def find_project_dir(start_dir: str) -> str:
     :return: Project root directory
     """
 
-    while True:
+    project_dir = None
+    while project_dir is None:
         potential_data_dir = os.path.join(start_dir, 'data')
 
         if os.path.exists(potential_data_dir):
-            return start_dir
+            project_dir = start_dir
+        else:
+            parent = os.path.dirname(start_dir)
 
-        parent = os.path.dirname(start_dir)
+            if parent == start_dir:
+                raise FileNotFoundError('Could not find "data" folder')
 
-        if parent == start_dir:
-            raise FileNotFoundError('Could not find "data" folder')
-
-        start_dir = parent
+            start_dir = parent
+    return project_dir
 
 
 # Directory of the current file
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
+DATA_DIR = os.environ.get('NHL_CARD_DATA_DIR')
+
 # Root project directory
-PROJECT_DIR = find_project_dir(CURRENT_DIR)
+if DATA_DIR:
+    PROJECT_DIR = os.path.dirname(DATA_DIR)
+else:
+    PROJECT_DIR = find_project_dir(CURRENT_DIR)
+    DATA_DIR = os.path.join(PROJECT_DIR, 'data')
 
-# Data directory
-DATA_DIR = os.path.join(PROJECT_DIR, 'data')
-
-
-
-# ====================================================================================================
-# DATA COLLECTION CONSTANTS
-# ====================================================================================================
-
-# Date card data was updated on
-UPDATE_DATE = 'July 1, 2026'
-
-# Situations to scrape team data for
-SITUATIONS = ['all', '5v5', '4v5', '5v4']
-
-# Seasons to scrape, process, and generate cards for
-DATA_SEASONS = [
-    '2007-2008', '2008-2009', '2009-2010', '2010-2011', '2011-2012',
-    '2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017',
-    '2017-2018', '2018-2019', '2019-2020', '2020-2021', '2021-2022',
-    '2022-2023', '2023-2024', '2024-2025', '2025-2026'
-]
-
-
-
-# ====================================================================================================
-# DATA PROCESSING CONSTANTS
-# ====================================================================================================
-
-# === ELO ===
-INITIAL_ELO = 1500
-ELO_K = 20
-ELO_S = 400
-ELO_HOME_ADV = 30
-
-ELO_RESULTS = {
-    'R Win': 1.0,
-    'OT Win': 0.9,
-    'SO Win': 0.7,
-    'SO Loss': 0.3,
-    'OT Loss': 0.1,
-    'R Loss': 0.0
-}
-
+# Card assets (fonts and team logos)
+ASSETS_DIR = os.path.join(DATA_DIR, 'card_data', 'assets')
 
 
 # ====================================================================================================
 # CARD GENERATION CONSTANTS
 # ====================================================================================================
+
+# Date card data was updated on
+UPDATE_DATE = 'September 1, 2026'
 
 # === NAMING ===
 # Attribute names with full names (CHANGE FOR TEAMS)
@@ -106,8 +75,8 @@ ATTRIBUTE_NAMES = {
 }
 
 # === FONTS ===
-BASIC_FONT_PATH = f'{DATA_DIR}/assets/fonts/basic.ttf'
-HEADING_FONT_PATH = f'{DATA_DIR}/assets/fonts/header.ttf'
+BASIC_FONT_PATH = os.path.join(ASSETS_DIR, 'fonts', 'basic.ttf')
+HEADING_FONT_PATH = os.path.join(ASSETS_DIR, 'fonts', 'header.ttf')
 
 # === COLORS ===
 # Card color RGB values
@@ -160,62 +129,6 @@ SECONDARY_COLORS = {
 # TEAMS, DIVISIONS, AND NUMBER OF GAMES PER SEASON
 # ====================================================================================================
 
-# All NHL team abbreviations and full team names
-TEAM_NAMES = {
-    'ANA': 'Anaheim Ducks',        'BOS': 'Boston Bruins',        'BUF': 'Buffalo Sabres',        'CGY': 'Calgary Flames',
-    'CAR': 'Carolina Hurricanes',  'CHI': 'Chicago Blackhawks',   'COL': 'Colorado Avalanche',    'CBJ': 'Columbus Blue Jackets',
-    'DAL': 'Dallas Stars',         'DET': 'Detroit Red Wings',    'EDM': 'Edmonton Oilers',       'FLA': 'Florida Panthers',
-    'LAK': 'Los Angeles Kings',    'MIN': 'Minnesota Wild',       'MTL': 'Montreal Canadiens',    'NSH': 'Nashville Predators',
-    'NJD': 'New Jersey Devils',    'NYI': 'New York Islanders',   'NYR': 'New York Rangers',      'OTT': 'Ottawa Senators',
-    'PHI': 'Philadelphia Flyers',  'PIT': 'Pittsburgh Penguins',  'SJS': 'San Jose Sharks',       'SEA': 'Seattle Kraken',
-    'STL': 'St. Louis Blues',      'TBL': 'Tampa Bay Lightning',  'TOR': 'Toronto Maple Leafs',   'VAN': 'Vancouver Canucks',
-    'UTA': 'Utah Mammoth',         'VGK': 'Vegas Golden Knights', 'WSH': 'Washington Capitals',   'WPG': 'Winnipeg Jets',
-    'ARI': 'Arizona Coyotes',      'ATL': 'Atlanta Thrashers',    'PHX': 'Phoenix Coyotes'
-}
-
-TEAM_NAME_FIXES = {
-    'St Louis Blues': 'St. Louis Blues',
-    'Utah Hockey Club': 'Utah Mammoth',
-}
-
-GAME_TEAM_NAME_FIXES = {
-    'Avalanche': 'Colorado Avalanche',
-    'Blackhawks': 'Chicago Blackhawks',
-    'Blue Jackets': 'Columbus Blue Jackets',
-    'Blues': 'St. Louis Blues',
-    'Bruins': 'Boston Bruins',
-    'Canadiens': 'Montreal Canadiens',
-    'Canucks': 'Vancouver Canucks',
-    'Capitals': 'Washington Capitals',
-    'Coyotes': 'Arizona Coyotes', # Phoenix Coyotes before 2014-2015
-    'Devils': 'New Jersey Devils',
-    'Ducks': 'Anaheim Ducks',
-    'Flames': 'Calgary Flames',
-    'Flyers': 'Philadelphia Flyers',
-    'Golden Knights': 'Vegas Golden Knights',
-    'Utah HC': 'Utah Mammoth',
-    'Hurricanes': 'Carolina Hurricanes',
-    'Islanders': 'New York Islanders',
-    'Kings': 'Los Angeles Kings',
-    'Kraken': 'Seattle Kraken',
-    'Jets': 'Winnipeg Jets',
-    'Lightning': 'Tampa Bay Lightning',
-    'Mammoth': 'Utah Mammoth',
-    'Maple Leafs': 'Toronto Maple Leafs',
-    'Oilers': 'Edmonton Oilers',
-    'Panthers': 'Florida Panthers',
-    'Penguins': 'Pittsburgh Penguins',
-    'Predators': 'Nashville Predators',
-    'Rangers': 'New York Rangers',
-    'Red Wings': 'Detroit Red Wings',
-    'Sabres': 'Buffalo Sabres',
-    'Senators': 'Ottawa Senators',
-    'Sharks': 'San Jose Sharks',
-    'Stars': 'Dallas Stars',
-    'Thrashers': 'Atlanta Thrashers',
-    'Wild': 'Minnesota Wild',
-}
-
 # Games per season
 SEASON_GAMES = {
     '2025-2026': 82,    # Current season (max games any team has played)
@@ -260,217 +173,4 @@ SEASON_TEAM_NUM = {
     '2009-2010': 30,
     '2008-2009': 30,
     '2007-2008': 30
-}
-
-# Division to conference map
-DIVISION_CONFERENCE = {
-    'Atlantic': 'Eastern',
-    'Metropolitan': 'Eastern',
-    'Northeast': 'Eastern',
-    'Southeast': 'Eastern',
-
-    'Central': 'Western',
-    'Northwest': 'Western',
-    'Pacific': 'Western'
-}
-
-# Team to division maps
-TEAM_DIVISION_MODERN_BASE = {
-    'Boston Bruins': 'Atlantic',
-    'Buffalo Sabres': 'Atlantic',
-    'Detroit Red Wings': 'Atlantic',
-    'Florida Panthers': 'Atlantic',
-    'Montreal Canadiens': 'Atlantic',
-    'Ottawa Senators': 'Atlantic',
-    'Tampa Bay Lightning': 'Atlantic',
-    'Toronto Maple Leafs': 'Atlantic',
-
-    'Carolina Hurricanes': 'Metropolitan',
-    'Columbus Blue Jackets': 'Metropolitan',
-    'New Jersey Devils': 'Metropolitan',
-    'New York Islanders': 'Metropolitan',
-    'New York Rangers': 'Metropolitan',
-    'Philadelphia Flyers': 'Metropolitan',
-    'Pittsburgh Penguins': 'Metropolitan',
-    'Washington Capitals': 'Metropolitan',
-
-    'Chicago Blackhawks': 'Central',
-    'Colorado Avalanche': 'Central',
-    'Dallas Stars': 'Central',
-    'Minnesota Wild': 'Central',
-    'Nashville Predators': 'Central',
-    'St. Louis Blues': 'Central',
-    'Winnipeg Jets': 'Central',
-
-    'Anaheim Ducks': 'Pacific',
-    'Calgary Flames': 'Pacific',
-    'Edmonton Oilers': 'Pacific',
-    'Los Angeles Kings': 'Pacific',
-    'San Jose Sharks': 'Pacific',
-    'Vancouver Canucks': 'Pacific',
-}
-
-TEAM_DIVISION_UTAH = {
-    **TEAM_DIVISION_MODERN_BASE,
-    'Utah Mammoth': 'Central',
-    'Seattle Kraken': 'Pacific',
-    'Vegas Golden Knights': 'Pacific',
-}
-
-TEAM_DIVISION_SEATTLE = {
-    **TEAM_DIVISION_MODERN_BASE,
-    'Arizona Coyotes': 'Central',
-    'Seattle Kraken': 'Pacific',
-    'Vegas Golden Knights': 'Pacific',
-}
-
-TEAM_DIVISION_COVID = {
-    'Calgary Flames': 'North',
-    'Edmonton Oilers': 'North',
-    'Montreal Canadiens': 'North',
-    'Ottawa Senators': 'North',
-    'Toronto Maple Leafs': 'North',
-    'Vancouver Canucks': 'North',
-    'Winnipeg Jets': 'North',
-
-    'Boston Bruins': 'East',
-    'Buffalo Sabres': 'East',
-    'New Jersey Devils': 'East',
-    'New York Islanders': 'East',
-    'New York Rangers': 'East',
-    'Philadelphia Flyers': 'East',
-    'Pittsburgh Penguins': 'East',
-    'Washington Capitals': 'East',
-
-    'Carolina Hurricanes': 'Central',
-    'Chicago Blackhawks': 'Central',
-    'Columbus Blue Jackets': 'Central',
-    'Dallas Stars': 'Central',
-    'Detroit Red Wings': 'Central',
-    'Florida Panthers': 'Central',
-    'Nashville Predators': 'Central',
-    'Tampa Bay Lightning': 'Central',
-
-    'Anaheim Ducks': 'West',
-    'Arizona Coyotes': 'West',
-    'Colorado Avalanche': 'West',
-    'Los Angeles Kings': 'West',
-    'Minnesota Wild': 'West',
-    'St. Louis Blues': 'West',
-    'San Jose Sharks': 'West',
-    'Vegas Golden Knights': 'West'
-}
-
-TEAM_DIVISION_VEGAS = {
-    **TEAM_DIVISION_MODERN_BASE,
-    'Arizona Coyotes': 'Pacific',
-    'Vegas Golden Knights': 'Pacific',
-}
-
-TEAM_DIVISION_ARIZONA = {
-    **TEAM_DIVISION_MODERN_BASE,
-    'Arizona Coyotes': 'Pacific',
-}
-
-TEAM_DIVISION_PHOENIX = {
-    **TEAM_DIVISION_MODERN_BASE,
-    'Phoenix Coyotes': 'Pacific',
-}
-
-TEAM_DIVISION_WINNIPEG = {
-    'New Jersey Devils': 'Atlantic',
-    'New York Islanders': 'Atlantic',
-    'New York Rangers': 'Atlantic',
-    'Philadelphia Flyers': 'Atlantic',
-    'Pittsburgh Penguins': 'Atlantic',
-
-    'Boston Bruins': 'Northeast',
-    'Buffalo Sabres': 'Northeast',
-    'Montreal Canadiens': 'Northeast',
-    'Ottawa Senators': 'Northeast',
-    'Toronto Maple Leafs': 'Northeast',
-
-    'Carolina Hurricanes': 'Southeast',
-    'Florida Panthers': 'Southeast',
-    'Tampa Bay Lightning': 'Southeast',
-    'Washington Capitals': 'Southeast',
-    'Winnipeg Jets': 'Southeast',
-
-    'Chicago Blackhawks': 'Central',
-    'Columbus Blue Jackets': 'Central',
-    'Detroit Red Wings': 'Central',
-    'Nashville Predators': 'Central',
-    'St. Louis Blues': 'Central',
-
-    'Calgary Flames': 'Northwest',
-    'Colorado Avalanche': 'Northwest',
-    'Edmonton Oilers': 'Northwest',
-    'Minnesota Wild': 'Northwest',
-    'Vancouver Canucks': 'Northwest',
-
-    'Anaheim Ducks': 'Pacific',
-    'Dallas Stars': 'Pacific',
-    'Los Angeles Kings': 'Pacific',
-    'Phoenix Coyotes': 'Pacific',
-    'San Jose Sharks': 'Pacific',
-}
-
-TEAM_DIVISION_ATLANTA = {
-    'New Jersey Devils': 'Atlantic',
-    'New York Islanders': 'Atlantic',
-    'New York Rangers': 'Atlantic',
-    'Philadelphia Flyers': 'Atlantic',
-    'Pittsburgh Penguins': 'Atlantic',
-
-    'Boston Bruins': 'Northeast',
-    'Buffalo Sabres': 'Northeast',
-    'Montreal Canadiens': 'Northeast',
-    'Ottawa Senators': 'Northeast',
-    'Toronto Maple Leafs': 'Northeast',
-
-    'Atlanta Thrashers': 'Southeast',
-    'Carolina Hurricanes': 'Southeast',
-    'Florida Panthers': 'Southeast',
-    'Tampa Bay Lightning': 'Southeast',
-    'Washington Capitals': 'Southeast',
-
-    'Chicago Blackhawks': 'Central',
-    'Columbus Blue Jackets': 'Central',
-    'Detroit Red Wings': 'Central',
-    'Nashville Predators': 'Central',
-    'St. Louis Blues': 'Central',
-
-    'Calgary Flames': 'Northwest',
-    'Colorado Avalanche': 'Northwest',
-    'Edmonton Oilers': 'Northwest',
-    'Minnesota Wild': 'Northwest',
-    'Vancouver Canucks': 'Northwest',
-
-    'Anaheim Ducks': 'Pacific',
-    'Dallas Stars': 'Pacific',
-    'Los Angeles Kings': 'Pacific',
-    'Phoenix Coyotes': 'Pacific',
-    'San Jose Sharks': 'Pacific',
-}
-
-TEAM_DIVISION_BY_SEASON = {
-    '2025-2026': TEAM_DIVISION_UTAH,
-    '2024-2025': TEAM_DIVISION_UTAH,
-    '2023-2024': TEAM_DIVISION_SEATTLE,
-    '2022-2023': TEAM_DIVISION_SEATTLE,
-    '2021-2022': TEAM_DIVISION_SEATTLE,
-    '2020-2021': TEAM_DIVISION_COVID,
-    '2019-2020': TEAM_DIVISION_VEGAS,
-    '2018-2019': TEAM_DIVISION_VEGAS,
-    '2017-2018': TEAM_DIVISION_VEGAS,
-    '2016-2017': TEAM_DIVISION_ARIZONA,
-    '2015-2016': TEAM_DIVISION_ARIZONA,
-    '2014-2015': TEAM_DIVISION_ARIZONA,
-    '2013-2014': TEAM_DIVISION_PHOENIX,
-    '2012-2013': TEAM_DIVISION_WINNIPEG,
-    '2011-2012': TEAM_DIVISION_WINNIPEG,
-    '2010-2011': TEAM_DIVISION_ATLANTA,
-    '2009-2010': TEAM_DIVISION_ATLANTA,
-    '2008-2009': TEAM_DIVISION_ATLANTA,
-    '2007-2008': TEAM_DIVISION_ATLANTA,
 }
