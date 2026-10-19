@@ -86,8 +86,8 @@ def make_header_section(team_row: pd.Series, mode: str = 'light') -> Image:
     # Get stats variables, each with its league-wide rank. GFAx/GAAx (Goals/Goals Against Above Expected at
     # 5v5) now come pre-computed from the card data itself (stats-collection's team_card_data.py) in place of
     # the old Shots For %/Fenwick For % lines.
-    goals_for_above_expected = f"{float(team_row['EV_GFAx']):.3f} ({inflect_engine.ordinal(int(team_row['gfax_pct_rank']))})"
-    goals_against_above_expected = f"{float(team_row['EV_GAAx']):.3f} ({inflect_engine.ordinal(int(team_row['gaax_pct_rank']))})"
+    goals_for_above_expected = f"{float(team_row['EV_GFAx']):.2f} ({inflect_engine.ordinal(int(team_row['gfax_pct_rank']))})"
+    goals_against_above_expected = f"{float(team_row['EV_GAAx']):.2f} ({inflect_engine.ordinal(int(team_row['gaax_pct_rank']))})"
     goals_for_percent = f"{float(team_row['EV_GF%']):.3f} ({inflect_engine.ordinal(int(team_row['gf_pct_rank']))})"
     xgoals_for_percent = f"{float(team_row['EV_xGF%']):.3f} ({inflect_engine.ordinal(int(team_row['xgf_pct_rank']))})"
     corsi_for_percent = f"{float(team_row['EV_CF%']):.3f} ({inflect_engine.ordinal(int(team_row['cf_pct_rank']))})"
