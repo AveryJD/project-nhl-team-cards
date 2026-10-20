@@ -1,7 +1,7 @@
 # NHL Team Stat Cards
 
 ## Description
-Generates visually appealing stat cards for each NHL team from prepared card data. The data collection, ratings (Elo and SRS), and card data assembly live in the separate [project-nhl-stats-collection](https://github.com/AveryJD/project-nhl-stats-collection) project, which writes the card-ready CSV files this project reads.
+Generates visually appealing stat cards for each NHL team from prepared card data. The data collection, ratings (Elo and SRS), and card data assembly live in the separate [nhl-stats-collection-and-processing](https://github.com/AveryJD/nhl-stats-collection-and-processing) project, which writes the card-ready CSV files this project reads.
 
 <p align="center">
   <img src="example_card.png" alt="Carolina Hurricanes Team Card" width="50%" />
@@ -19,8 +19,8 @@ Generates visually appealing stat cards for each NHL team from prepared card dat
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/AveryJD/project-nhl-team-cards.git
-cd project-nhl-team-cards
+git clone https://github.com/AveryJD/nhl-team-cards.git
+cd nhl-team-cards
 ```
 
 2. **Create a data folder in the project root:**
